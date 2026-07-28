@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\RecipeDetails;
-use App\Models\TreatmentDetails;
+use App\Models\RecipeDetail;
+use App\Models\TreatmentDetail;
 use App\Models\Farm;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
