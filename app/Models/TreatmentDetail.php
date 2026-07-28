@@ -22,7 +22,7 @@ class TreatmentDetail extends Model
     ];
 
     protected $casts = [
-        'quantity_used' => 'integer',
+        'quantity_used' => 'decimal',
     ];
 
     public function treatment(): BelongsTo

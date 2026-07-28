@@ -17,12 +17,12 @@ class StoreRecipeDetailRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array<mixed>|string>
+     * // @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'quantity' => 'required|decimal',
+            'quantity' => 'required|decimal:0,2',
             'instruction' => 'required|string|max:255',
             'recipe_id' => 'required|exists:recipes,id',
             'product_id' => 'required|exists:products,id',

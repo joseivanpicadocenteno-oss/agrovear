@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\RecipeDetail;
 use App\Http\Requests\StoreRecipeDetailRequest;
+use App\Http\Requests\UpdateRecipeDetailRequest;
 
-use Illuminate\Http\Request;
 
 class RecipeDetailController extends Controller
 {
@@ -14,7 +14,7 @@ class RecipeDetailController extends Controller
      */
     public function index()
     {
-        return response()->json(RecipeDetail:all());
+        return response()->json(RecipeDetail::all());
     }
 
     /**
@@ -57,7 +57,7 @@ class RecipeDetailController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreRecipeDetailRequest $request, RecipeDetail $recipeDetail)
+    public function update(UpdateRecipeDetailRequest $request, RecipeDetail $recipeDetail)
     {
         $recipeDetail->update($request->validated());
 
@@ -72,7 +72,7 @@ class RecipeDetailController extends Controller
      */
     public function destroy(RecipeDetail $recipeDetail)
     {
-        $recipeDetail->Delete();
+        $recipeDetail->delete();
 
         return response()->json([
             'message' => 'Detalles de receta eliminados correctamente.'
