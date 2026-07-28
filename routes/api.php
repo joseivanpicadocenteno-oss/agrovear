@@ -30,6 +30,6 @@ Route::apiResource('gestation_records', GestationRecordController::class);
 
 Route::apiResource('treatments', TreatmentController::class);
 
-Route::apiResource('treatments_details', TreatmentDetailController::class);
+Route::apiResource('treatment_details', TreatmentDetailController::class);
 
 Route::apiResource('recipe_details', RecipeDetailController::class);
