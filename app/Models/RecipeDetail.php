@@ -20,7 +20,7 @@ class RecipeDetail extends Model
     ];
 
     protected $casts = [
-        'quantity' => 'integer'
+        'quantity' => 'decimal'
     ];
 
     public function recipe(): BelongsTo

@@ -28,15 +28,15 @@ class FeedingRecord extends Model
         'estimated_feed_cost' => 'decimal:2',
     ];
 
-    public function calculateEstimatedCost(): float
-    {
-    $cost = 0;
+   // public function calculateEstimatedCost(): float
+  //  {
+  //  $cost = 0;
 
-    foreach ($this->recipe->recipeDetails as $detail) {
-        $cost += $detail->quantity * $detail->product->unit_cost;
-    }
+   // foreach ($this->recipe->recipeDetails as $detail) {
+      //  $cost += $detail->quantity * $detail->product->unit_cost;
+  //  }
 
-    return $cost;
+ //  return $cost;
     }
 
     public function animal(): BelongsTo
