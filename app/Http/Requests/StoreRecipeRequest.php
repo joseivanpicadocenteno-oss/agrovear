@@ -36,25 +36,25 @@ class StoreRecipeRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Se requiere el nombre del producto.',
-            'name.string' => 'El nombre del producto solo puede contener letras.',
-            'name.max' => 'El nombre del producto no puede tener más de 255 caracteres.',
+            'name.required' => 'Se requiere el nombre de la receta',
+            'name.string' => 'El nombre de la receta solo puede contener letras.',
+            'name.max' => 'El nombre de la receta no puede tener más de 255 caracteres.',
 
-            'description.required' => 'Se requiere una descripcion del producto.',
-            'description.string' => 'La descripcion del producto solo puede contener letras.',
-            'description.max' => 'La descripcion del producto no puede tener más de 255 caracteres.',
+            'description.required' => 'Se requiere una descripcion de la receta.',
+            'description.string' => 'La descripcion de la receta solo puede contener letras.',
+            'description.max' => 'La descripcion de la receta no puede tener más de 255 caracteres.',
 
-            'objective.required' => 'Se requiere el objetivo del producto.',
-            'objective.string' => 'El objetivo del producto solo puede contener letras.',
-            'objective.max' => 'El objetivo del producto no puede tener más de 255 caracteres.',
+            'objective.required' => 'Se requiere el objetivo de la receta.',
+            'objective.string' => 'El objetivo de la receta solo puede contener letras.',
+            'objective.max' => 'El objetivo de la receta no puede tener más de 255 caracteres.',
 
-            'frequent_use.required' => 'Se requiere la frecuencia de uso del producto.',
+            'frequent_use.required' => 'Se requiere la frecuencia de uso de la receta.',
             'frequent_use.string' => 'La frecuencia de uso solo puede contener letras.',
             'frequent_use.max' => 'La frecuencia de uso no puede tener más de 255 caracteres.',
 
-            'filter_species.required' => 'Se requiere la especie animal del producto.',
-            'filter_species.string' => 'La especie del producto solo puede contener letras.',
-            'filter_species.max' => 'la especie del producto no puede tener más de 255 caracteres.',
+            'filter_species.required' => 'Se requiere la especie animal de la receta.',
+            'filter_species.string' => 'La especie de la receta solo puede contener letras.',
+            'filter_species.max' => 'la especie de la receta no puede tener más de 255 caracteres.',
 
             'min_age_filter.required' => 'Se requiere la edad minima para consumo.',
             'min_age_filter.integer' => 'La edad minima de consumo debe ser un número entero.',
@@ -63,7 +63,7 @@ class StoreRecipeRequest extends FormRequest
             'max_age_filter.integer' => 'La edad máxima de consumo debe ser un número entero.',
 
             'min_weight_filter.required' => 'Se requiere el minimo de filtrado.',
-            'min_weight_filter.numeric' => 'El minimo a filtrar debe ser un número entero.',
+            'min_weight_filter.numeric' => 'El peso minimo debe ser un valor númerico.',
 
             'recommended_duration_days.required' => 'Se requiere la recomendacion de dias de consumo.',
             'recommended_duration_days.integer' => 'Los dias recomendados debe ser un número entero.',
