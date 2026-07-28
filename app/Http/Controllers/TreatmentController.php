@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Treatment;
-use App\Http\Request\StoreTreatmentRequest;
+use App\Http\Requests\StoreTreatmentRequest;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Requests;
 
 class TreatmentController extends Controller
 {
@@ -32,7 +32,7 @@ class TreatmentController extends Controller
     {
         $treatment = Treatment::create($request->validated());
 
-        return response()-json([
+        return response()->json([
             'message' => 'Tratamiento creato correctamente.',
             'data' => $treatment
         ], 201);

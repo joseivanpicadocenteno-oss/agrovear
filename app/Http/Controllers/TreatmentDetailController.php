@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TreatmentDetail;
-use App\Http\Requests\StoreTreatmenteDetailRequest;
+use App\Http\Requests\StoreTreatmentDetailRequest;
 
 class TreatmentDetailController extends Controller
 {
