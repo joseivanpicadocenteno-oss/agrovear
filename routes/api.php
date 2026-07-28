@@ -8,6 +8,7 @@ use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\FarmController;
 use App\Http\Controllers\FeedingRecordController;
 
+
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
