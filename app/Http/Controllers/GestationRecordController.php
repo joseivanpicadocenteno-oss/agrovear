@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\GestationRecord;
+use App\Http\StoreGestationRecordRequest;
 
 class GestationRecordController extends Controller
 {
@@ -11,7 +12,7 @@ class GestationRecordController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(GestationRecord::all());
     }
 
     /**
@@ -25,23 +26,27 @@ class GestationRecordController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreGestationRecordRequest $request)
     {
-        //
+        $gestationRecord = GestationRecord::create($request->validated());
+
+        return response()->json([
+            'message' => 'Registro de Gestacion creado correctamente.'
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(GestationRecord $gestationRecord)
     {
-        //
+        return response()->json($gestationRecord);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(GestationRecord $gestationRecord)
     {
         //
     }
@@ -49,16 +54,24 @@ class GestationRecordController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateGestationRecordRequest $request, GestationRecord $gestationRecord)
     {
-        //
+        $gestationRecord->update($request->validated());
+
+        return response()->json([
+            'message' => 'El Record de Gestacion se actualizo correctamente.'
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(GestationRecord $gestationRecord)
     {
-        //
+        $gestationRecord->delete();
+
+        return response()->json([
+            'message' => 'Record de Gestacion eliminado correctamente.'
+        ]);
     }
 }
