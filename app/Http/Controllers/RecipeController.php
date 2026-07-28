@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Recipe;
 use App\Http\Requests\StoreRecipeRequest;
+use App\Http\Requests\UpdateRecipeRequest;
 
 class RecipeController extends Controller
 {
@@ -55,7 +56,7 @@ class RecipeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreRecipeRequest $request, Recipe $recipe)
+    public function update(UpdateRecipeRequest $request, Recipe $recipe)
     {
         $recipe->update($request->validated());
 
@@ -74,7 +75,6 @@ class RecipeController extends Controller
 
     return response()->json([
         'message' => 'Receta eliminada correctamente',
-        'data' => $recipe
     ]);
     }
 }
