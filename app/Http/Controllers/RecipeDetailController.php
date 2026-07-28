@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RecipeDetail;
+use App\Http\Requests\StoreRecipeDetailRequest;
+
 use Illuminate\Http\Request;
 
 class RecipeDetailController extends Controller
@@ -11,7 +14,7 @@ class RecipeDetailController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(RecipeDetail:all());
     }
 
     /**
@@ -25,23 +28,28 @@ class RecipeDetailController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRecipeDetailRequest $request)
     {
-        //
+        $recipeDetail = RecipeDetail::create($request->validated());
+
+        return response()->json([
+            'message' => 'Detalles de Receta creado correctamente',
+            'data' => $recipeDetail
+        ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(RecipeDetail $recipeDetail)
     {
-        //
+        return response()->json($recipeDetail);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(RecipeDetail $recipeDetail)
     {
         //
     }
@@ -49,16 +57,25 @@ class RecipeDetailController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreRecipeDetailRequest $request, RecipeDetail $recipeDetail)
     {
-        //
+        $recipeDetail->update($request->validated());
+
+        return response()->json([
+            'message' => 'Detalles de Receta actualizado correctamente.',
+            'data' => $recipeDetail
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(RecipeDetail $recipeDetail)
     {
-        //
+        $recipeDetail->Delete();
+
+        return response()->json([
+            'message' => 'Detalles de receta eliminados correctamente.'
+        ]);
     }
 }

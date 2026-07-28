@@ -28,26 +28,26 @@ class FeedingRecordController extends Controller
      */
     public function store(StoreFeedingRecordRequest $request)
     {
-        $feedingrecord = FeedingRecord::create($request->validated());
+        $feedingRecord = FeedingRecord::create($request->validated());
 
         return response()->json([
             'message' => 'Historial Alimenticio creado correctamente',
-            'data' => $feedingrecord
+            'data' => $feedingRecord
         ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(FeedingRecord $feedingrecord)
+    public function show(FeedingRecord $feedingRecord)
     {
-        return response()->json($feedingrecord);
+        return response()->json($feedingRecord);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(FeedingRecord $feedingrecord)
+    public function edit(FeedingRecord $feedingRecord)
     {
         //
     }

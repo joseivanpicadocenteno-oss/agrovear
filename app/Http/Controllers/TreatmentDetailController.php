@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\TreatmentDetail;
+use App\Http\Requests\StoreTreatmenteDetailRequest;
 
 class TreatmentDetailController extends Controller
 {
@@ -11,7 +12,7 @@ class TreatmentDetailController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(TreatmentDetail::all());
     }
 
     /**
@@ -25,23 +26,28 @@ class TreatmentDetailController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTreatmentDetailRequest $request)
     {
-        //
+        $treatmentDetail = TreatmentDetail::create($request->validation());
+
+        return response()->json([
+            'message' => 'Detalles de tratamiento creado correctamente.',
+            'data' => $treatmentDetail
+        ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(TreatmentDetail $treatmentDetail)
     {
-        //
+        return response()->json($treatmentDetail);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(TreatmentDetail $treatmentDetail)
     {
         //
     }
@@ -49,16 +55,25 @@ class TreatmentDetailController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreTreatmentDetailRequest $request, TreatmentDetail $treatmentDetail)
     {
-        //
+        $treatmentDetail->update($request->validated());
+
+        return response()->json([
+            'message' => 'Detalles de tratamiento actualizado correctamente.',
+            'data' => $treatmentDetail
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(TreatmentDetail $treatmentDetail)
     {
-        //
+        $treatmentDetail->Delete();
+
+        return response()->json([
+            'message' => 'Detalles de tratamiento eliminado correctamente.'
+        ]);
     }
 }
