@@ -20,7 +20,7 @@ class StoreAnimalRequest extends FormRequest
             'breed' => 'required|string|max:255',
             'species' => 'required|string|max:255',
             'weight_kg' => 'required|numeric',
-            'last_weighing' => 'nullable|date',
+            'last_weighing' => 'required|date',
             'target_weight' => 'required|numeric',
             'sex' => 'required|string|max:10',
             'reproductive_status' => 'required|string',

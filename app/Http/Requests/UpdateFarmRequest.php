@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateFarmRequest extends FormRequest
@@ -18,12 +17,19 @@ class UpdateFarmRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array<mixed>|string>
+     * //@return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+    return [
+        'name' => 'required|string|max:255',
+        'department' => 'required|string|max:255',
+        'municipality' => 'required|string|max:255',
+        'address' => 'nullable|string|max:255',
+        'phone' => 'required|string|min:8|max:20',
+        'description' => 'nullable|string|max:400',
+        'active' => 'boolean',
+        'user_id' => 'required|exists:users,id'
+    ];
     }
 }

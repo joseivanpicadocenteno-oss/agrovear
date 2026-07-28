@@ -57,7 +57,7 @@ class FarmController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(updateFarmRequest $request, Farm $farm)
+    public function update(UpdateFarmRequest $request, Farm $farm)
     {
         $farm->update($request->validated());
 
