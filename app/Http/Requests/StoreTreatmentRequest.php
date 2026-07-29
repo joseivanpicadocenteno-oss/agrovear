@@ -23,6 +23,7 @@ class StoreTreatmentRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'name' => 'required|string|max:255',
             'start_date' => 'required|date',
             'end_date' => 'required|date',
             'diagnosis' => 'required|string|max:500',
@@ -35,6 +36,10 @@ class StoreTreatmentRequest extends FormRequest
     public function messages()
     {
         return [
+            'name.required' => 'El nombre del tratamiento es requerido.',
+            'name.string' => 'El campo nombre del tratamiento solo acepta letras.',
+            'name.max' => 'El nombre del tratamiento solo permite 255 letras.',
+
             'start_date.required' => 'La fecha de inicio es requerida',
             'start_date.date' => 'La fecha de inicio no tiene un formato valido',
 

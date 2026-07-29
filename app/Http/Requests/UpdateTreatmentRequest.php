@@ -14,6 +14,7 @@ class UpdateTreatmentRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'name' => 'sometimes|string|max:255',
             'start_date' => 'sometimes|date',
             'end_date' => 'sometimes|date',
             'diagnosis' => 'sometimes|string|max:500',

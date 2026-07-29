@@ -14,6 +14,7 @@ class Treatment extends Model
     use HasFactory;
 
     protected $fillable = [
+        'name',
         'start_date',
         'end_date',
         'diagnosis',
