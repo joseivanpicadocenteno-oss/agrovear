@@ -23,8 +23,8 @@ class StoreTreatmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'start_date' => 'required|datetime',
-            'end_date' => 'required|datetime',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
             'diagnosis' => 'required|string|max:500',
             'observations' => 'nullable|string|max:255',
             'active' => 'boolean',
@@ -36,10 +36,10 @@ class StoreTreatmentRequest extends FormRequest
     {
         return [
             'start_date.required' => 'La fecha de inicio es requerida',
-            'start_date.datetime' => 'La fecha de inicio es campo numerico',
+            'start_date.date' => 'La fecha de inicio no tiene un formato valido',
 
             'end_date.required' => 'La fecha de finalizacion es requerida.',
-            'end_date.datetime' => 'La fecha de finalizacion es requerida.',
+            'end_date.date' => 'La fecha de finalizacion no tiene un formato valido.',
 
             'diagnosis.required' => 'Breve diagnosis requerida.',
             'diagnosis.string' => 'La Diagnosis solo puede contener letras',
