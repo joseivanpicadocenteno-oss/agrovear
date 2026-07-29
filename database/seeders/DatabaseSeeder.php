@@ -2,24 +2,25 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Farm;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class FarmSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        Farm::create([
+            'name' => 'Granja El Progreso',
+            'department' => 'Estelí',
+            'municipality' => 'Condega',
+            'address' => 'Km 5 carretera norte',
+            'phone' => '88889999',
+            'description' => 'Granja principal de Agrovear',
+            'active' => true,
+            'user_id' => 1,
         ]);
     }
 }
