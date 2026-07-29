@@ -29,7 +29,7 @@ class TreatmentDetailController extends Controller
      */
     public function store(StoreTreatmentDetailRequest $request)
     {
-        $treatmentDetail = TreatmentDetail::create($request->validation());
+        $treatmentDetail = TreatmentDetail::create($request->validated());
 
         return response()->json([
             'message' => 'Detalles de tratamiento creado correctamente.',
