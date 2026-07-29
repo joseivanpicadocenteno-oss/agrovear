@@ -23,6 +23,7 @@ class StoreTreatmentDetailRequest extends FormRequest
     {
         return [
             'quantity_used' => 'required|numeric',
+            'frequency' => 'required|string|max:255',
             'instructions' => 'required|string|max:255',
             'treatment_id' => 'required|exists:treatments,id',
             'product_id' => 'required|exists:products,id',
