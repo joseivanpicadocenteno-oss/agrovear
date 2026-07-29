@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('treatment_details', function (Blueprint $table) {
             $table->id();
-            $table->integer('quantity_used');
+            $table->integer('quantity_used', 8, 2);
             $table->string('frequency');
             $table->text('instructions');
 
