@@ -22,9 +22,9 @@ class StoreTreatmentDetailRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'quantity' => 'required|integer',
-            'instruction' => 'required|strig|max:255',
-            'recipe_id' => 'required|exists:recipes,id',
+            'quantity_used' => 'required|numeric',
+            'instructions' => 'required|string|max:255',
+            'treatment_id' => 'required|exists:treatments,id',
             'product_id' => 'required|exists:products,id',
         ];
     }
@@ -39,8 +39,8 @@ class StoreTreatmentDetailRequest extends FormRequest
             'instruction.string' => 'Las instrucciones solo pueden contener letras.',
             'instruction.max' => 'Las instrucciones no pueden tener mas de 255 caracteres.',
 
-            'recipe_id.required' => 'La identificacion de la receta es requerida.',
-            'recipe_id.exists' => 'La identificacion de la receta aun no es creada',
+            'treatment_id.required' => 'La identificacion del tratamiento es requerida.',
+            'treatment_id.exists' => 'La identificacion del tratamiento aun no es creada',
 
             'product_id.required' => 'La identificacion del producto es requerido',
             'product_id.exists' => 'La identificacion del producto aun no es creada.',

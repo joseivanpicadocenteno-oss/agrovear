@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TreatmentDetail;
 use App\Http\Requests\StoreTreatmentDetailRequest;
+use App\Http\Requests\UpdateTreatmentDetailRequest;
 
 class TreatmentDetailController extends Controller
 {
@@ -55,7 +56,7 @@ class TreatmentDetailController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreTreatmentDetailRequest $request, TreatmentDetail $treatmentDetail)
+    public function update(UpdateTreatmentDetailRequest $request, TreatmentDetail $treatmentDetail)
     {
         $treatmentDetail->update($request->validated());
 
