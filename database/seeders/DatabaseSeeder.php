@@ -2,25 +2,21 @@
 
 namespace Database\Seeders;
 
-use App\Models\Farm;
 use Illuminate\Database\Seeder;
 
-class FarmSeeder extends Seeder
+class DatabaseSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Seed the application's database.
      */
     public function run(): void
     {
-        Farm::create([
-            'name' => 'Granja El Progreso',
-            'department' => 'Estelí',
-            'municipality' => 'Condega',
-            'address' => 'Km 5 carretera norte',
-            'phone' => '88889999',
-            'description' => 'Granja principal de Agrovear',
-            'active' => true,
-            'user_id' => 1,
+        $this->call([
+            UserSeeder::class,
+            FarmSeeder::class,
+            ProductSeeder::class,
+            RecipeSeeder::class,
+            AnimalSeeder::class,
         ]);
     }
 }
