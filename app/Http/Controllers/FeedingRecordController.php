@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FeedingRecord;
 use App\Http\Requests\StoreFeedingRecordRequest;
+use App\Http\Requests\UpdateFeedingRecordRequest;
 
 class FeedingRecordController extends Controller
 {
@@ -55,7 +56,7 @@ class FeedingRecordController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreFeedingRecordRequest $request, FeedingRecord $feedingRecord)
+    public function update(UpdateFeedingRecordRequest $request, FeedingRecord $feedingRecord)
     {
         $feedingRecord->update($request->validated());
 

@@ -71,7 +71,7 @@ class TreatmentDetailController extends Controller
      */
     public function destroy(TreatmentDetail $treatmentDetail)
     {
-        $treatmentDetail->Delete();
+        $treatmentDetail->delete();
 
         return response()->json([
             'message' => 'Detalles de tratamiento eliminado correctamente.'
