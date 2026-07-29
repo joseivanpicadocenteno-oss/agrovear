@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Treatment;
-use App\Models\Produtc;
+use App\Models\Product;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
