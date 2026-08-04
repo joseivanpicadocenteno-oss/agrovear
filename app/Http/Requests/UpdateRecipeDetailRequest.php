@@ -22,10 +22,10 @@ class UpdateRecipeDetailRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'quantity' => 'required|decimal:0,2',
-            'instruction' => 'required|string|max:255',
-            'recipe_id' => 'required|exists:recipes,id',
-            'product_id' => 'required|exists:products,id',
+            'quantity' => 'sometimes|decimal:0,2',
+            'instruction' => 'sometimes|string|max:255',
+            'recipe_id' => 'sometimes|exists:recipes,id',
+            'product_id' => 'sometimes|exists:products,id',
         ];
     }
 }

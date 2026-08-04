@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\GestationRecord;
 use App\Http\Requests\StoreGestationRecordRequest;
+use App\Http\Requests\UpdateGestationRecordRequest;
 
 class GestationRecordController extends Controller
 {
@@ -54,7 +55,7 @@ class GestationRecordController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreGestationRecordRequest $request, GestationRecord $gestationRecord)
+    public function update(UpdateGestationRecordRequest $request, GestationRecord $gestationRecord)
     {
         $gestationRecord->update($request->validated());
 
