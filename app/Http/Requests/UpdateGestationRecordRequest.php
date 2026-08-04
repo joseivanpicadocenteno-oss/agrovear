@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateGestationRecordRequest extends FormRequest
@@ -18,16 +17,16 @@ class UpdateGestationRecordRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array<mixed>|string>
+     * //@return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-        'service_date' => 'sometimmes|date',
-        'estimated_birth_date' => 'sometimmes|date',
-        'actual_birth_date' => 'sometimmes|date',
-        'live_births' => 'sometimmes|numeric',
-        'stillbirths' => 'sometimmes|numeric',
+        'service_date' => 'sometimes|date',
+        'estimated_birth_date' => 'sometimes|date',
+        'actual_birth_date' => 'sometimes|date',
+        'live_births' => 'sometimes|numeric',
+        'stillbirths' => 'sometimes|numeric',
         'observations' => 'sometimes|string|max:255',
         'active' => 'sometimes|boolean',
         'animal_id' => 'sometimes|exists:animals,id',

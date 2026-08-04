@@ -32,8 +32,9 @@ class GestationRecordController extends Controller
         $gestationRecord = GestationRecord::create($request->validated());
 
         return response()->json([
-            'message' => 'Registro de Gestacion creado correctamente.'
-        ]);
+            'message' => 'Registro de Gestacion creado correctamente.',
+            'data' => $gestationRecord
+        ], 201);
     }
 
     /**
