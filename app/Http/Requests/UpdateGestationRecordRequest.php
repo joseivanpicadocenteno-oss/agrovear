@@ -12,7 +12,7 @@ class UpdateGestationRecordRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,14 @@ class UpdateGestationRecordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+        'service_date' => 'sometimmes|date',
+        'estimated_birth_date' => 'sometimmes|date',
+        'actual_birth_date' => 'sometimmes|date',
+        'live_births' => 'sometimmes|numeric',
+        'stillbirths' => 'sometimmes|numeric',
+        'observations' => 'sometimes|string|max:255',
+        'active' => 'sometimes|boolean',
+        'animal_id' => 'sometimes|exists:animals,id',
         ];
     }
 }
