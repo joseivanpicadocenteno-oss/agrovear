@@ -30,7 +30,6 @@ class StoreFarmRequest extends FormRequest
             'phone' => 'required|string|min:8|max:20',
             'description' => 'nullable|string|max:400',
             'active' => 'boolean',
-            'user_id' => 'required|exists:users,id'
         ];
     }
 

@@ -31,6 +31,11 @@ class Farm extends Model
         'active' => 'boolean'
     ];
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function animals(): HasMany
     {
         return $this->hasMany(Animal::class);
@@ -46,8 +51,4 @@ class Farm extends Model
         return $this->hasMany(Recipe::class);
     }
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
 }
