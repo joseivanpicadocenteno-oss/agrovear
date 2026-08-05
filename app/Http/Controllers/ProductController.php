@@ -13,15 +13,14 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return response()->json(Product::all());
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return response()->json(
+            Product::with('farm:id,name')
+                ->whereHas('farm', function ($query) {
+                    $query->where('user_id', auth()->id());
+                })
+                ->orderBy('name')
+                ->get()
+        );
     }
 
     /**
@@ -29,11 +28,19 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
+        $farm = auth()->user()->farms()->find($request->farm_id);
+
+        if (!$farm) {
+            return response()->json([
+                'message' => 'No tienes permiso para agregar productos a esta granja.'
+            ], 403);
+        }
+
         $product = Product::create($request->validated());
 
         return response()->json([
             'message' => 'Producto creado correctamente',
-            'data' => $product
+            'data' => $product->load('farm:id,name')
         ], 201);
     }
 
@@ -42,15 +49,19 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return response()->json($product);
-    }
+        $product->load([
+            'farm:id,name,user_id',
+            'recipeDetails:id,recipe_id,product_id,quantity',
+            'treatmentDetails:id,treatment_id,product_id,quantity_used'
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        //
+        if ($product->farm->user_id !== auth()->id()) {
+            return response()->json([
+                'message' => 'No tienes permiso para acceder a este producto.'
+            ], 403);
+        }
+
+        return response()->json($product);
     }
 
     /**
@@ -58,11 +69,31 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
+        $product->load('farm:id,user_id');
+
+        if ($product->farm->user_id !== auth()->id()) {
+            return response()->json([
+                'message' => 'No tienes permiso para modificar este producto.'
+            ], 403);
+        }
+
+        if ($request->filled('farm_id')) {
+
+            $farm = auth()->user()->farms()->find($request->farm_id);
+
+            if (!$farm) {
+                return response()->json([
+                    'message' => 'No puedes mover el producto a una granja que no te pertenece.'
+                ], 403);
+            }
+        }
+
         $product->update($request->validated());
 
         return response()->json([
-        'message' => 'Producto actualizado correctamente',
-        'data' => $product]);
+            'message' => 'Producto actualizado correctamente',
+            'data' => $product->load('farm:id,name')
+        ]);
     }
 
     /**
@@ -70,10 +101,18 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        $product->load('farm:id,user_id');
+
+        if ($product->farm->user_id !== auth()->id()) {
+            return response()->json([
+                'message' => 'No tienes permiso para eliminar este producto.'
+            ], 403);
+        }
+
         $product->delete();
 
         return response()->json([
-        'message' => 'Producto eliminado correctamente'
+            'message' => 'Producto eliminado correctamente'
         ]);
     }
 }
