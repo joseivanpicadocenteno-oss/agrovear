@@ -9,7 +9,7 @@ use App\Http\Requests\UpdateRecipeRequest;
 class RecipeController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Mostrar todas las recetas del usuario autenticado.
      */
     public function index()
     {
@@ -20,19 +20,11 @@ class RecipeController extends Controller
                 })
                 ->orderBy('name')
                 ->get()
-            );
+        );
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Crear una nueva receta.
      */
     public function store(StoreRecipeRequest $request)
     {
@@ -40,25 +32,29 @@ class RecipeController extends Controller
 
         if (!$farm) {
             return response()->json([
-                'message' => 'No tienes permiso para agregar Recetas a esta granja'
+                'message' => 'No tienes permiso para agregar recetas a esta granja.'
             ], 403);
         }
 
         $recipe = Recipe::create($request->validated());
 
         return response()->json([
-            'message' => 'Receta creada correctamente',
-            'data' => $recipe
+            'message' => 'Receta creada correctamente.',
+            'data' => $recipe->load('farm:id,name')
         ], 201);
     }
 
     /**
-     * Display the specified resource.
+     * Mostrar una receta.
      */
     public function show(Recipe $recipe)
     {
         $recipe->load([
-            'farm:id,name,user_id'
+            'farm:id,name,user_id',
+
+            // Productos que componen la receta
+            'recipeDetails:id,recipe_id,product_id,quantity',
+            'recipeDetails.product:id,name,unit_measurement'
         ]);
 
         if ($recipe->farm->user_id !== auth()->id()) {
@@ -66,20 +62,15 @@ class RecipeController extends Controller
                 'message' => 'No tienes permiso para acceder a esta receta.'
             ], 403);
         }
-    
+
+        // Ocultamos el user_id antes de responder
+        unset($recipe->farm->user_id);
+
         return response()->json($recipe);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Recipe $recipe)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * Actualizar una receta.
      */
     public function update(UpdateRecipeRequest $request, Recipe $recipe)
     {
@@ -91,13 +82,13 @@ class RecipeController extends Controller
             ], 403);
         }
 
-        if ($recipe->filled('farm_id')) {
+        if ($request->filled('farm_id')) {
 
             $farm = auth()->user()->farms()->find($request->farm_id);
 
             if (!$farm) {
                 return response()->json([
-                    'message' => 'NO puedes mover la recete a una granja que no te pertenece'
+                    'message' => 'No puedes mover la receta a una granja que no te pertenece.'
                 ], 403);
             }
         }
@@ -105,28 +96,28 @@ class RecipeController extends Controller
         $recipe->update($request->validated());
 
         return response()->json([
-            'message' => 'Receta actualizada correctamente',
+            'message' => 'Receta actualizada correctamente.',
             'data' => $recipe->load('farm:id,name')
         ]);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Eliminar una receta.
      */
     public function destroy(Recipe $recipe)
     {
         $recipe->load('farm:id,user_id');
 
-        if ($recipe->farm->user_id != auth()->id()) {
+        if ($recipe->farm->user_id !== auth()->id()) {
             return response()->json([
                 'message' => 'No tienes permiso para eliminar esta receta.'
             ], 403);
         }
-    
+
         $recipe->delete();
 
         return response()->json([
-        'message' => 'Receta eliminada correctamente',
+            'message' => 'Receta eliminada correctamente.'
         ]);
     }
 }
