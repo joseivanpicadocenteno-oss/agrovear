@@ -15,7 +15,13 @@ class FarmController extends Controller
     public function index()
     {
         return response()->json(
-            Farm::where('user_id', auth()->id())->get()
+        Farm::where('user_id', auth()->id())
+            ->with([
+                'animals:id,name,species,farm_id',
+                'products:id,name,current_stock,farm_id',
+                'recipes:id,name,farm_id'
+        ])
+            ->get()
         );
     }
 
