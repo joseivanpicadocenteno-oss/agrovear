@@ -33,7 +33,7 @@ class ProductController extends Controller
         if (!$farm) {
             return response()->json([
                 'message' => 'No tienes permiso para agregar productos a esta granja.'
-            ], 403);
+            ],403);
         }
 
         $product = Product::create($request->validated());
@@ -41,7 +41,7 @@ class ProductController extends Controller
         return response()->json([
             'message' => 'Producto creado correctamente',
             'data' => $product->load('farm:id,name')
-        ], 201);
+        ],201);
     }
 
     /**
@@ -51,17 +51,19 @@ class ProductController extends Controller
     {
         $product->load([
             'farm:id,name,user_id',
-            'recipeDetails:id,recipe_id,product_id,quantity',
-            'treatmentDetails:id,treatment_id,product_id,quantity_used'
+            'recipeDetails.recipe:id,name',
+            'treatmentDetails.treatment:id,name'
         ]);
-
+    
         if ($product->farm->user_id !== auth()->id()) {
             return response()->json([
                 'message' => 'No tienes permiso para acceder a este producto.'
-            ], 403);
+            ],403);
         }
-
-        return response()->json($product);
+    
+        return response()->json(
+            $product->makeHidden(['farm_id'])
+        );
     }
 
     /**
