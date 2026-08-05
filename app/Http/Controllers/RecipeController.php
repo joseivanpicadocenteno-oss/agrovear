@@ -13,7 +13,14 @@ class RecipeController extends Controller
      */
     public function index()
     {
-        return response()->json(Recipe::all());
+        return response()->json(
+            Recipe::with('farm:id,name')
+                ->whereHas('farm', function ($query) {
+                    $query->where('user_id', auth()->id());
+                })
+                ->orderBy('name')
+                ->get()
+            );
     }
 
     /**
@@ -29,6 +36,14 @@ class RecipeController extends Controller
      */
     public function store(StoreRecipeRequest $request)
     {
+        $farm = auth()->user()->farms()->find($request->farm_id);
+
+        if (!$farm) {
+            return response()->json([
+                'message' => 'No tienes permiso para agregar Recetas a esta granja'
+            ], 403);
+        }
+
         $recipe = Recipe::create($request->validated());
 
         return response()->json([
@@ -42,6 +57,16 @@ class RecipeController extends Controller
      */
     public function show(Recipe $recipe)
     {
+        $recipe->load([
+            'farm:id,name,user_id'
+        ]);
+
+        if ($recipe->farm->user_id !== auth()->id()) {
+            return response()->json([
+                'message' => 'No tienes permiso para acceder a esta receta.'
+            ], 403);
+        }
+    
         return response()->json($recipe);
     }
 
@@ -58,11 +83,30 @@ class RecipeController extends Controller
      */
     public function update(UpdateRecipeRequest $request, Recipe $recipe)
     {
+        $recipe->load('farm:id,user_id');
+
+        if ($recipe->farm->user_id !== auth()->id()) {
+            return response()->json([
+                'message' => 'No tienes permiso para modificar esta receta.'
+            ], 403);
+        }
+
+        if ($recipe->filled('farm_id')) {
+
+            $farm = auth()->user()->farms()->find($request->farm_id);
+
+            if (!$farm) {
+                return response()->json([
+                    'message' => 'NO puedes mover la recete a una granja que no te pertenece'
+                ], 403);
+            }
+        }
+
         $recipe->update($request->validated());
 
         return response()->json([
             'message' => 'Receta actualizada correctamente',
-            'data' => $recipe
+            'data' => $recipe->load('farm:id,name')
         ]);
     }
 
@@ -71,10 +115,18 @@ class RecipeController extends Controller
      */
     public function destroy(Recipe $recipe)
     {
-    $recipe->delete();
+        $recipe->load('farm:id,user_id');
 
-    return response()->json([
+        if ($recipe->farm->user_id != auth()->id()) {
+            return response()->json([
+                'message' => 'No tienes permiso para eliminar esta receta.'
+            ], 403);
+        }
+    
+        $recipe->delete();
+
+        return response()->json([
         'message' => 'Receta eliminada correctamente',
-    ]);
+        ]);
     }
 }
