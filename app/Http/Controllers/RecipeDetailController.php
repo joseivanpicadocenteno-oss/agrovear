@@ -14,7 +14,20 @@ class RecipeDetailController extends Controller
      */
     public function index()
     {
-        return response()->json(RecipeDetail::all());
+        return response()->json(
+            RecipeDetail::with([
+            'recipe:id,name',
+            'product:id,name'
+        ])
+
+        ->whereHas('recipe.farm', function ($query) {
+            $query->where('user_id', auth()->id());
+        })
+
+        ->orderBy('recipe_id')
+        ->get()
+
+    );
     }
 
     /**
@@ -30,6 +43,17 @@ class RecipeDetailController extends Controller
      */
     public function store(StoreRecipeDetailRequest $request)
     {
+        $exists = RecipeDetail::where('recipe_id', $request->recipe_id)
+            ->where('product_id', $request->product_id)
+            ->exists();
+
+        if ($exists) {
+
+            return response()->json([
+                'message' => 'Este proyecto ya forma parte de la receta.'
+            ], 402);
+        }
+
         $recipeDetail = RecipeDetail::create($request->validated());
 
         return response()->json([
