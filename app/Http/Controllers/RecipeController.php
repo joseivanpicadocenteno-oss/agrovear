@@ -66,7 +66,9 @@ class RecipeController extends Controller
         // Ocultamos el user_id antes de responder
         unset($recipe->farm->user_id);
 
-        return response()->json($recipe);
+        return response()->json(
+            $recipe->makeHidden(['farm_id'])
+        );
     }
 
     /**

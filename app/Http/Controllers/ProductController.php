@@ -54,13 +54,15 @@ class ProductController extends Controller
             'recipeDetails.recipe:id,name',
             'treatmentDetails.treatment:id,name'
         ]);
-    
+
         if ($product->farm->user_id !== auth()->id()) {
             return response()->json([
                 'message' => 'No tienes permiso para acceder a este producto.'
             ],403);
         }
-    
+
+        unset($product->farm->user_id);
+
         return response()->json(
             $product->makeHidden(['farm_id'])
         );
