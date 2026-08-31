@@ -50,15 +50,16 @@ class RecipeDetailController extends Controller
         if ($exists) {
 
             return response()->json([
-                'message' => 'Este proyecto ya forma parte de la receta.'
+                'message' => 'Este producto ya forma parte de la receta.'
             ], 402);
         }
 
         $recipeDetail = RecipeDetail::create($request->validated());
 
         return response()->json([
-            'message' => 'Detalles de Receta creado correctamente',
-            'data' => $recipeDetail
+            'message' => 'Ingrediente creado correctamente',
+            'data' => $recipeDetail->load
+            ('recipe_id:name, product_id:name')
         ], 201);
     }
 
@@ -67,7 +68,21 @@ class RecipeDetailController extends Controller
      */
     public function show(RecipeDetail $recipeDetail)
     {
-        return response()->json($recipeDetail);
+
+        $recipeDetail->load(['recipe:id,name', 'product:id_name']);
+
+        if  ($recipeDetail->recipe->farm->user_id !== auth()->id()) {
+            return response()->json([
+                'message' => 'No tienes permiso para acceder a este ingrediente.'
+            ], 403);
+        }
+
+        return response()->json(
+            $recipeDetail->load([
+                'recipe:id,name',
+                'product:id,name'
+            ])
+        );
     }
 
     /**
@@ -83,11 +98,31 @@ class RecipeDetailController extends Controller
      */
     public function update(UpdateRecipeDetailRequest $request, RecipeDetail $recipeDetail)
     {
+        $recipeDetail->load(['recipe:id,name', 'product:id_name']);
+
+        if  ($recipeDetail->recipe->farm->user_id !== auth()->id()) {
+            return response()->json([
+                'message' => 'No tienes permiso para actualizar a este ingrediente.'
+            ], 402);
+        }
+
+        $exists = RecipeDetail::where('recipe_id',$request->recipe_id)
+            ->where('product_id',$request->product_id)
+            ->exists();
+
+        if ($exists) {
+
+            return response()->json([
+                'message'=>'Este producto ya forma parte de la receta.'
+            ],422);
+
+        }
+
         $recipeDetail->update($request->validated());
 
         return response()->json([
             'message' => 'Detalles de Receta actualizado correctamente.',
-            'data' => $recipeDetail
+            'data' => $recipeDetail->load('farm:id,name')
         ]);
     }
 
@@ -96,6 +131,14 @@ class RecipeDetailController extends Controller
      */
     public function destroy(RecipeDetail $recipeDetail)
     {
+        if ($recipeDetail->recipe->farm->user_id !== auth()->id()) {
+
+        return response()->json([
+            'message'=>'No tienes permiso para eliminar este ingrediente.'
+        ],403);
+
+        }
+
         $recipeDetail->delete();
 
         return response()->json([
@@ -103,3 +146,6 @@ class RecipeDetailController extends Controller
         ]);
     }
 }
+
+
+
