@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\FarmController;
 use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\ProductController;
@@ -8,21 +10,22 @@ use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\GestationRecordController;
 use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\FeedingRecordController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
 
-// Autenticación Web (Vistas + Procesamiento)
+// Autenticación Web
 Route::middleware('guest')->group(function () {
-    Route::get('/login', fn() => view('auth.login'))->name('login');
-    Route::get('/register', fn() => view('auth.register'))->name('register');
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
+    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [RegisterController::class, 'register']);
 });
 
-// Panel Principal y Módulos Protegidos por Sesión
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
+
+// Panel y Módulos Protegidos
 Route::middleware(['auth'])->group(function () {
     Route::get('/', fn() => redirect()->route('dashboard'));
     Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
 
-    // Recursos Web (CRUDs completos con Blade)
     Route::resource('farms', FarmController::class);
     Route::resource('animals', AnimalController::class);
     Route::resource('products', ProductController::class);
