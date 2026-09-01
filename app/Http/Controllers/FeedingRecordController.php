@@ -3,78 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Models\FeedingRecord;
+use App\Models\Animal;
+use App\Models\Recipe;
 use App\Http\Requests\StoreFeedingRecordRequest;
-use App\Http\Requests\UpdateFeedingRecordRequest;
 
 class FeedingRecordController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        return response()->json(FeedingRecord::all());
+        $feedings = FeedingRecord::whereHas('animal.farm', function ($q) {
+            $q->where('user_id', auth()->id());
+        })->with(['animal', 'recipe'])->latest()->paginate(15);
+
+        return view('feedings.index', compact('feedings'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $animals = Animal::whereHas('farm', fn($q) => $q->where('user_id', auth()->id()))->get();
+        $recipes = Recipe::whereHas('farm', fn($q) => $q->where('user_id', auth()->id()))->get();
+
+        return view('feedings.create', compact('animals', 'recipes'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreFeedingRecordRequest $request)
     {
-        $feedingRecord = FeedingRecord::create($request->validated());
+        FeedingRecord::create($request->validated());
 
-        return response()->json([
-            'message' => 'Historial Alimenticio creado correctamente',
-            'data' => $feedingRecord
-        ], 201);
+        return redirect()->route('feedings.index')->with('success', 'Registro de alimentación guardado.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(FeedingRecord $feedingRecord)
+    public function destroy(FeedingRecord $feeding)
     {
-        return response()->json($feedingRecord);
-    }
+        if ($feeding->animal->farm->user_id !== auth()->id()) {
+            abort(403);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(FeedingRecord $feedingRecord)
-    {
-        //
-    }
+        $feeding->delete();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateFeedingRecordRequest $request, FeedingRecord $feedingRecord)
-    {
-        $feedingRecord->update($request->validated());
-
-        return response()->json([
-            'message' => 'Historial Alimenticio actualizado correctamente.',
-            'data' => $feedingRecord
-        ]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(FeedingRecord $feedingrecord)
-    {
-        $feedingrecord->delete();
-
-        return response()->json([
-            'message' => 'Historial Alimenticio eliminado correctamente.'
-        ]);
+        return redirect()->route('feedings.index')->with('success', 'Registro de alimentación eliminado.');
     }
 }
