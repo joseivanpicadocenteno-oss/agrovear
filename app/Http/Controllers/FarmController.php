@@ -21,7 +21,10 @@ class FarmController extends Controller
 
     public function store(StoreFarmRequest $request)
     {
-        auth()->user()->farms()->create($request->validated());
+        $data = $request->validated();
+        $data['user_id'] = auth()->id();
+
+        Farm::create($data);
 
         return redirect()->route('farms.index')->with('success', 'Finca creada exitosamente.');
     }
