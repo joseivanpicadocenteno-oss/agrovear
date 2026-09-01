@@ -21,14 +21,19 @@ class FarmController extends Controller
 
     public function store(StoreFarmRequest $request)
     {
-        $data = $request->validated();
-        $data['user_id'] = auth()->id();
-
-        Farm::create($data);
-
-        return redirect()->route('farms.index')->with('success', 'Finca creada exitosamente.');
+        // Obtenemos los datos ya validados por el FormRequest
+        $validated = $request->validated();
+        
+        // Le asignamos el ID del usuario autenticado en la sesión
+        $validated['user_id'] = auth()->id();
+    
+        // Creamos la finca
+        Farm::create($validated);
+    
+        // Redireccionamos a la lista con mensaje flash de éxito
+        return redirect()->route('farms.index')->with('success', 'Finca guardada exitosamente.');
     }
-
+    
     public function show(Farm $farm)
     {
         $this->authorizeOwner($farm);
