@@ -3,123 +3,74 @@
 namespace App\Http\Controllers;
 
 use App\Models\Recipe;
+use App\Models\Farm;
+use App\Models\Product;
 use App\Http\Requests\StoreRecipeRequest;
 use App\Http\Requests\UpdateRecipeRequest;
 
 class RecipeController extends Controller
 {
-    /**
-     * Mostrar todas las recetas del usuario autenticado.
-     */
     public function index()
     {
-        return response()->json(
-            Recipe::with('farm:id,name')
-                ->whereHas('farm', function ($query) {
-                    $query->where('user_id', auth()->id());
-                })
-                ->orderBy('name')
-                ->get()
-        );
+        $recipes = Recipe::whereHas('farm', function ($q) {
+            $q->where('user_id', auth()->id());
+        })->with(['farm', 'recipeDetails.product'])->latest()->paginate(15);
+
+        return view('recipes.index', compact('recipes'));
     }
 
-    /**
-     * Crear una nueva receta.
-     */
+    public function create()
+    {
+        $farms = Farm::where('user_id', auth()->id())->where('active', true)->get();
+        $products = Product::whereHas('farm', fn($q) => $q->where('user_id', auth()->id()))->get();
+
+        return view('recipes.create', compact('farms', 'products'));
+    }
+
     public function store(StoreRecipeRequest $request)
     {
-        $farm = auth()->user()->farms()->find($request->farm_id);
-
-        if (!$farm) {
-            return response()->json([
-                'message' => 'No tienes permiso para agregar recetas a esta granja.'
-            ], 403);
-        }
-
         $recipe = Recipe::create($request->validated());
 
-        return response()->json([
-            'message' => 'Receta creada correctamente.',
-            'data' => $recipe->load('farm:id,name')
-        ], 201);
+        return redirect()->route('recipes.index')->with('success', 'Receta/Dieta creada correctamente.');
     }
 
-    /**
-     * Mostrar una receta.
-     */
     public function show(Recipe $recipe)
     {
-        $recipe->load([
-            'farm:id,name,user_id',
+        $this->authorizeOwner($recipe);
+        $recipe->load(['farm', 'recipeDetails.product']);
 
-            // Productos que componen la receta
-            'recipeDetails:id,recipe_id,product_id,quantity',
-            'recipeDetails.product:id,name,unit_measurement'
-        ]);
-
-        if ($recipe->farm->user_id !== auth()->id()) {
-            return response()->json([
-                'message' => 'No tienes permiso para acceder a esta receta.'
-            ], 403);
-        }
-
-        // Ocultamos el user_id antes de responder
-        unset($recipe->farm->user_id);
-
-        return response()->json(
-            $recipe->makeHidden(['farm_id'])
-        );
+        return view('recipes.show', compact('recipe'));
     }
 
-    /**
-     * Actualizar una receta.
-     */
+    public function edit(Recipe $recipe)
+    {
+        $this->authorizeOwner($recipe);
+        $farms = Farm::where('user_id', auth()->id())->where('active', true)->get();
+        $products = Product::whereHas('farm', fn($q) => $q->where('user_id', auth()->id()))->get();
+
+        return view('recipes.edit', compact('recipe', 'farms', 'products'));
+    }
+
     public function update(UpdateRecipeRequest $request, Recipe $recipe)
     {
-        $recipe->load('farm:id,user_id');
-
-        if ($recipe->farm->user_id !== auth()->id()) {
-            return response()->json([
-                'message' => 'No tienes permiso para modificar esta receta.'
-            ], 403);
-        }
-
-        if ($request->filled('farm_id')) {
-
-            $farm = auth()->user()->farms()->find($request->farm_id);
-
-            if (!$farm) {
-                return response()->json([
-                    'message' => 'No puedes mover la receta a una granja que no te pertenece.'
-                ], 403);
-            }
-        }
-
+        $this->authorizeOwner($recipe);
         $recipe->update($request->validated());
 
-        return response()->json([
-            'message' => 'Receta actualizada correctamente.',
-            'data' => $recipe->load('farm:id,name')
-        ]);
+        return redirect()->route('recipes.index')->with('success', 'Receta actualizada.');
     }
 
-    /**
-     * Eliminar una receta.
-     */
     public function destroy(Recipe $recipe)
     {
-        $recipe->load('farm:id,user_id');
-
-        if ($recipe->farm->user_id !== auth()->id()) {
-            return response()->json([
-                'message' => 'No tienes permiso para eliminar esta receta.'
-            ], 403);
-        }
-
+        $this->authorizeOwner($recipe);
         $recipe->delete();
 
-        return response()->json([
-            'message' => 'Receta eliminada correctamente.'
-        ]);
+        return redirect()->route('recipes.index')->with('success', 'Receta eliminada.');
+    }
+
+    private function authorizeOwner(Recipe $recipe)
+    {
+        if ($recipe->farm->user_id !== auth()->id()) {
+            abort(403, 'No autorizado.');
+        }
     }
 }
