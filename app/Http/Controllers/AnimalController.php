@@ -3,50 +3,43 @@
 namespace App\Http\Controllers;
 
 use App\Models\Animal;
+use App\Models\Farm;
 use App\Http\Requests\StoreAnimalRequest;
 use App\Http\Requests\UpdateAnimalRequest;
 
 class AnimalController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        return response()->json(
-            Animal::with('farm:id,name')
-                ->whereHas('farm', function ($query) {
-                    $query->where('user_id', auth()->id());
-                })
-                ->orderBy('name')
-                ->get()
-        );
+        $animals = Animal::with('farm:id,name')
+            ->whereHas('farm', function ($query) {
+                $query->where('user_id', auth()->id());
+            })
+            ->orderBy('name')
+            ->paginate(15);
+
+        return view('animals.index', compact('animals'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    public function create()
+    {
+        $farms = auth()->user()->farms;
+        return view('animals.create', compact('farms'));
+    }
+
     public function store(StoreAnimalRequest $request)
     {
         $farm = auth()->user()->farms()->find($request->farm_id);
 
         if (!$farm) {
-            return response()->json([
-                'message' => 'No tienes permiso para agregar animales a esta granja.'
-            ], 403);
+            abort(403, 'No tienes permiso para agregar animales a esta granja.');
         }
 
-        $animal = Animal::create($request->validated());
+        Animal::create($request->validated());
 
-        return response()->json([
-            'message' => 'Animal creado correctamente',
-            'data' => $animal->load('farm:id,name')
-        ], 201);
+        return redirect()->route('animals.index')->with('success', 'Animal creado correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Animal $animal)
     {
         $animal->load([
@@ -57,63 +50,55 @@ class AnimalController extends Controller
         ]);
 
         if ($animal->farm->user_id !== auth()->id()) {
-            return response()->json([
-                'message' => 'No tienes permiso para acceder a este animal.'
-            ], 403);
+            abort(403, 'No tienes permiso para acceder a este animal.');
         }
 
-        return response()->json($animal);
+        return view('animals.show', compact('animal'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    public function edit(Animal $animal)
+    {
+        $animal->load('farm');
+
+        if ($animal->farm->user_id !== auth()->id()) {
+            abort(403, 'No tienes permiso para editar este animal.');
+        }
+
+        $farms = auth()->user()->farms;
+        return view('animals.edit', compact('animal', 'farms'));
+    }
+
     public function update(UpdateAnimalRequest $request, Animal $animal)
     {
         $animal->load('farm:id,user_id');
 
         if ($animal->farm->user_id !== auth()->id()) {
-            return response()->json([
-                'message' => 'No tienes permiso para modificar este animal.'
-            ], 403);
+            abort(403, 'No tienes permiso para modificar este animal.');
         }
 
         if ($request->filled('farm_id')) {
-
             $farm = auth()->user()->farms()->find($request->farm_id);
 
             if (!$farm) {
-                return response()->json([
-                    'message' => 'No puedes mover el animal a una granja que no te pertenece.'
-                ], 403);
+                abort(403, 'No puedes mover el animal a una granja que no te pertenece.');
             }
         }
 
         $animal->update($request->validated());
 
-        return response()->json([
-            'message' => 'Animal actualizado correctamente',
-            'data' => $animal->load('farm:id,name')
-        ]);
+        return redirect()->route('animals.index')->with('success', 'Animal actualizado correctamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Animal $animal)
     {
         $animal->load('farm:id,user_id');
     
         if ($animal->farm->user_id !== auth()->id()) {
-            return response()->json([
-                'message' => 'No tienes permiso para eliminar este animal.'
-            ], 403);
+            abort(403, 'No tienes permiso para eliminar este animal.');
         }
 
         $animal->delete();
 
-        return response()->json([
-            'message' => 'Animal eliminado correctamente'
-        ]);
+        return redirect()->route('animals.index')->with('success', 'Animal eliminado correctamente.');
     }
 }
