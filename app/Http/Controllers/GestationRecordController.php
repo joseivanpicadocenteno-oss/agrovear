@@ -3,77 +3,68 @@
 namespace App\Http\Controllers;
 
 use App\Models\GestationRecord;
+use App\Models\Animal;
 use App\Http\Requests\StoreGestationRecordRequest;
 use App\Http\Requests\UpdateGestationRecordRequest;
 
 class GestationRecordController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        return response()->json(GestationRecord::all());
+        $gestations = GestationRecord::whereHas('animal.farm', function ($q) {
+            $q->where('user_id', auth()->id());
+        })->with('animal')->latest()->paginate(15);
+
+        return view('gestations.index', compact('gestations'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        // Solo hembras de las fincas del usuario
+        $animals = Animal::whereHas('farm', fn($q) => $q->where('user_id', auth()->id()))
+            ->where('sex', 'Femenino')
+            ->get();
+
+        return view('gestations.create', compact('animals'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreGestationRecordRequest $request)
     {
-        $gestationRecord = GestationRecord::create($request->validated());
+        GestationRecord::create($request->validated());
 
-        return response()->json([
-            'message' => 'Registro de Gestacion creado correctamente.',
-            'data' => $gestationRecord
-        ], 201);
+        return redirect()->route('gestations.index')->with('success', 'Registro de gestación guardado.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(GestationRecord $gestationRecord)
+    public function edit(GestationRecord $gestation)
     {
-        return response()->json($gestationRecord);
+        $this->authorizeOwner($gestation);
+        $animals = Animal::whereHas('farm', fn($q) => $q->where('user_id', auth()->id()))
+            ->where('sex', 'Femenino')
+            ->get();
+
+        return view('gestations.edit', compact('gestation', 'animals'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(GestationRecord $gestationRecord)
+    public function update(UpdateGestationRecordRequest $request, GestationRecord $gestation)
     {
-        //
+        $this->authorizeOwner($gestation);
+        $gestation->update($request->validated());
+
+        return redirect()->route('gestations.index')->with('success', 'Registro de gestación actualizado.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateGestationRecordRequest $request, GestationRecord $gestationRecord)
+    public function destroy(GestationRecord $gestation)
     {
-        $gestationRecord->update($request->validated());
+        $this->authorizeOwner($gestation);
+        $gestation->delete();
 
-        return response()->json([
-            'message' => 'El Record de Gestacion se actualizo correctamente.'
-        ]);
+        return redirect()->route('gestations.index')->with('success', 'Registro eliminado.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(GestationRecord $gestationRecord)
+    private function authorizeOwner(GestationRecord $gestation)
     {
-        $gestationRecord->delete();
-
-        return response()->json([
-            'message' => 'Record de Gestacion eliminado correctamente.'
-        ]);
+        if ($gestation->animal->farm->user_id !== auth()->id()) {
+            abort(403);
+        }
     }
 }
