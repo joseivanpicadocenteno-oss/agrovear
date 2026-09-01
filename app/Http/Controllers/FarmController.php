@@ -10,10 +10,7 @@ class FarmController extends Controller
 {
     public function index()
     {
-        $farms = Farm::where('user_id', auth()->id())
-            ->withCount(['animals', 'products', 'recipes'])
-            ->get();
-
+        $farms = Farm::where('user_id', auth()->id())->latest()->paginate(15);
         return view('farms.index', compact('farms'));
     }
 
@@ -24,42 +21,45 @@ class FarmController extends Controller
 
     public function store(StoreFarmRequest $request)
     {
-        Farm::create([
-            ...$request->validated(),
-            'user_id' => auth()->id()
-        ]);
+        auth()->user()->farms()->create($request->validated());
 
-        return redirect()->route('farms.index')->with('success', 'Granja registrada correctamente.');
+        return redirect()->route('farms.index')->with('success', 'Finca creada exitosamente.');
+    }
+
+    public function show(Farm $farm)
+    {
+        $this->authorizeOwner($farm);
+        $farm->load(['animals', 'products', 'recipes']);
+
+        return view('farms.show', compact('farm'));
     }
 
     public function edit(Farm $farm)
     {
-        if ($farm->user_id !== auth()->id()) {
-            abort(403, 'No tienes permiso para editar esta finca.');
-        }
-
+        $this->authorizeOwner($farm);
         return view('farms.edit', compact('farm'));
     }
 
     public function update(UpdateFarmRequest $request, Farm $farm)
     {
-        if ($farm->user_id !== auth()->id()) {
-            abort(403);
-        }
-
+        $this->authorizeOwner($farm);
         $farm->update($request->validated());
 
-        return redirect()->route('farms.index')->with('success', 'Granja actualizada correctamente.');
+        return redirect()->route('farms.index')->with('success', 'Finca actualizada correctamente.');
     }
 
     public function destroy(Farm $farm)
     {
-        if ($farm->user_id !== auth()->id()) {
-            abort(403);
-        }
-
+        $this->authorizeOwner($farm);
         $farm->delete();
 
-        return redirect()->route('farms.index')->with('success', 'Granja eliminada correctamente.');
+        return redirect()->route('farms.index')->with('success', 'Finca eliminada.');
+    }
+
+    private function authorizeOwner(Farm $farm)
+    {
+        if ($farm->user_id !== auth()->id()) {
+            abort(403, 'No tienes permiso sobre esta finca.');
+        }
     }
 }
