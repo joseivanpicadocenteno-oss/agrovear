@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\LoginRequest;
@@ -10,9 +11,16 @@ use App\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
 {
-    /**
-     * Registrar un nuevo usuario.
-     */
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
+    public function showRegisterForm()
+    {
+        return view('auth.register');
+    }
+
     public function register(RegisterRequest $request)
     {
         $user = User::create([
@@ -21,54 +29,31 @@ class AuthController extends Controller
             'password' => Hash::make($request->validated()['password']),
         ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        Auth::login($user);
 
-        return response()->json([
-            'message' => 'Usuario registrado correctamente.',
-            'user' => $user,
-            'token' => $token,
-        ], 201);
+        return redirect()->route('dashboard')->with('success', 'Usuario registrado correctamente.');
     }
 
-    /**
-     * Iniciar sesión.
-     */
     public function login(LoginRequest $request)
     {
         if (!Auth::attempt($request->validated())) {
-            return response()->json([
-                'message' => 'Credenciales incorrectas.'
-            ], 401);
+            return back()->withErrors([
+                'email' => 'Las credenciales proporcionadas son incorrectas.'
+            ])->onlyInput('email');
         }
 
-        $user = Auth::user();
+        $request->session()->regenerate();
 
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'message' => 'Inicio de sesión exitoso.',
-            'user' => $user,
-            'token' => $token,
-        ]);
+        return redirect()->route('dashboard');
     }
 
-    /**
-     * Obtener el usuario autenticado.
-     */
-    public function user()
+    public function logout(Request $request)
     {
-        return response()->json(Auth::user());
-    }
+        Auth::logout();
 
-    /**
-     * Cerrar sesión.
-     */
-    public function logout()
-    {
-        Auth::user()->currentAccessToken()->delete();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        return response()->json([
-            'message' => 'Sesión cerrada correctamente.'
-        ]);
+        return redirect()->route('login');
     }
 }
