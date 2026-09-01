@@ -1,36 +1,55 @@
 @extends('layouts.app')
 
-@section('title', 'Nueva Finca')
+@section('title', 'Crear Finca')
 @section('page_title', 'Registrar Nueva Finca')
 
 @section('content')
 <div class="max-w-2xl bg-white p-8 rounded-xl shadow-sm border border-stone-200">
+
+    {{-- Mostrar errores de validación si existen --}}
+    @if ($errors->any())
+        <div class="mb-6 p-4 bg-red-100 border border-red-300 text-red-700 rounded-lg text-sm">
+            <p class="font-bold mb-1">Por favor corrige los siguientes errores:</p>
+            <ul class="list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="{{ route('farms.store') }}" method="POST" class="space-y-5">
         @csrf
 
         <div>
-            <label class="block font-heading font-semibold text-tierra-fertil text-sm mb-1">Nombre de la Finca / Predio</label>
-            <input type="text" name="name" value="{{ old('name') }}" placeholder="Ej: Finca La Esperanza" required class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm">
-            @error('name') <span class="text-xs text-red-600 font-semibold">{{ $message }}</span> @enderror
+            <label class="block font-heading font-semibold text-tierra-fertil text-sm mb-1">Nombre de la Finca *</label>
+            <input type="text" name="name" value="{{ old('name') }}" required class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm">
         </div>
 
         <div class="grid grid-cols-2 gap-4">
             <div>
-                <label class="block font-heading font-semibold text-tierra-fertil text-sm mb-1">Departamento</label>
-                <input type="text" name="department" value="{{ old('department') }}" placeholder="Ej: Antioquia" required class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm">
-                @error('department') <span class="text-xs text-red-600 font-semibold">{{ $message }}</span> @enderror
+                <label class="block font-heading font-semibold text-tierra-fertil text-sm mb-1">Departamento *</label>
+                <input type="text" name="department" value="{{ old('department') }}" required class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm">
             </div>
             <div>
-                <label class="block font-heading font-semibold text-tierra-fertil text-sm mb-1">Municipio</label>
-                <input type="text" name="municipality" value="{{ old('municipality') }}" placeholder="Ej: Medellín" required class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm">
-                @error('municipality') <span class="text-xs text-red-600 font-semibold">{{ $message }}</span> @enderror
+                <label class="block font-heading font-semibold text-tierra-fertil text-sm mb-1">Municipio *</label>
+                <input type="text" name="municipality" value="{{ old('municipality') }}" required class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm">
             </div>
         </div>
 
         <div>
-            <label class="block font-heading font-semibold text-tierra-fertil text-sm mb-1">Teléfono de Contacto</label>
-            <input type="text" name="phone" value="{{ old('phone') }}" placeholder="Ej: +57 300 123 4567" required class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm">
-            @error('phone') <span class="text-xs text-red-600 font-semibold">{{ $message }}</span> @enderror
+            <label class="block font-heading font-semibold text-tierra-fertil text-sm mb-1">Dirección / Comunidad</label>
+            <input type="text" name="address" value="{{ old('address') }}" class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm">
+        </div>
+
+        <div>
+            <label class="block font-heading font-semibold text-tierra-fertil text-sm mb-1">Teléfono *</label>
+            <input type="text" name="phone" value="{{ old('phone') }}" required class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm">
+        </div>
+
+        <div>
+            <label class="block font-heading font-semibold text-tierra-fertil text-sm mb-1">Descripción</label>
+            <textarea name="description" rows="3" class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm">{{ old('description') }}</textarea>
         </div>
 
         <div class="flex items-center space-x-2 pt-2">
