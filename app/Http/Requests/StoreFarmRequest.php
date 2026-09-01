@@ -2,24 +2,23 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreFarmRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
+    protected function prepareForValidation()
+    {
+        // Convierte el checkbox desmarcado (null) en false/0 explícito para la regla boolean
+        $this->merge([
+            'active' => $this->has('active') ? 1 : 0,
+        ]);
+    }
+
     public function rules(): array
     {
         return [
@@ -33,26 +32,25 @@ class StoreFarmRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
-        return[
-            'name.required' => 'El nombre de su granja es requerido.',
-            'name.string' => 'El nombre de la granja solo puede contener texto.',
-            'name.max' => 'El nombre de la granja no puede tener más de 255 caracteres.',
+        return [
+            'name.required' => 'El nombre de su finca es requerido.',
+            'name.string' => 'El nombre de la finca solo puede contener texto.',
+            'name.max' => 'El nombre de la finca no puede tener más de 255 caracteres.',
 
-            'department.required' => 'El departamento de la granja es requerido.',
+            'department.required' => 'El departamento de la finca es requerido.',
             'department.string' => 'El departamento solo puede contener texto.',
             'department.max' => 'El departamento no puede tener más de 255 caracteres.',
 
-            'municipality.required' => 'El municipio de la granja es requerido.',
+            'municipality.required' => 'El municipio de la finca es requerido.',
             'municipality.string' => 'El municipio solo puede contener texto.',
             'municipality.max' => 'El municipio no puede tener más de 255 caracteres.',
 
-            'phone.required' => 'El numero de telefono de la granja o agricultor es requerido.',
-            'phone.string' => 'El numero solo puede contener numeros',
-            'phone.min' => 'El numero no puede tener más de 20 digitos.',
-            'phone.max' => 'El numero no puede tener menos de 08 digitos.',
-
+            'phone.required' => 'El número de teléfono de la finca o agricultor es requerido.',
+            'phone.string' => 'El número solo puede contener texto o números.',
+            'phone.min' => 'El número no puede tener menos de 8 dígitos.',
+            'phone.max' => 'El número no puede tener más de 20 dígitos.',
         ];
     }
 }
