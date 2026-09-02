@@ -6,10 +6,9 @@
 @section('content')
 <div class="max-w-2xl bg-white p-8 rounded-xl shadow-sm border border-stone-200">
 
-    {{-- Mostrar errores de validación si existen --}}
     @if ($errors->any())
         <div class="mb-6 p-4 bg-red-100 border border-red-300 text-red-700 rounded-lg text-sm">
-            <p class="font-bold mb-1">Por favor corrige los siguientes errores:</p>
+            <p class="font-bold mb-1">Por favor corrige los errores:</p>
             <ul class="list-disc list-inside">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>

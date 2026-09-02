@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('title', 'Mis Fincas')
-@section('page_title', 'Gestión de Fincas')
+@section('page_title', 'Listado de Fincas')
 
 @section('content')
 <div class="flex justify-between items-center mb-6">
-    <p class="text-stone-600 text-sm">Listado de predios registrados bajo tu cuenta.</p>
+    <p class="text-stone-600 text-sm">Gestiona los predios registrados bajo tu cuenta.</p>
     <a href="{{ route('farms.create') }}" class="bg-verde-natural hover:bg-opacity-90 text-white font-heading font-bold px-4 py-2 rounded-lg text-sm shadow-sm transition">
         + Nueva Finca
     </a>
@@ -24,7 +24,7 @@
         </thead>
         <tbody class="divide-y divide-stone-200 text-sm">
             @forelse($farms as $farm)
-                <tr class="hover:bg-stone-50">
+                <tr class="hover:bg-stone-50 transition">
                     <td class="p-4 font-bold text-stone-800">
                         <a href="{{ route('farms.show', $farm) }}" class="hover:underline text-verde-natural">
                             {{ $farm->name }}
@@ -41,7 +41,7 @@
                     </td>
                     <td class="p-4 text-right space-x-2">
                         <a href="{{ route('farms.edit', $farm) }}" class="text-xs font-bold text-tierra-fertil hover:underline">Editar</a>
-                        <form action="{{ route('farms.destroy', $farm) }}" method="POST" class="inline" onsubmit="return confirm('¿Eliminar esta finca?')">
+                        <form action="{{ route('farms.destroy', $farm) }}" method="POST" class="inline" onsubmit="return confirm('¿Deseas eliminar esta finca?')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-xs font-bold text-red-600 hover:underline">Eliminar</button>
@@ -50,10 +50,16 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" class="p-8 text-center text-stone-500">No tienes fincas registradas aún.</td>
+                    <td colspan="5" class="p-8 text-center text-stone-500">
+                        No tienes fincas registradas aún. <a href="{{ route('farms.create') }}" class="text-verde-natural font-bold underline">Crea la primera aquí</a>.
+                    </td>
                 </tr>
             @endforelse
         </tbody>
     </table>
+</div>
+
+<div class="mt-4">
+    {{ $farms->links() }}
 </div>
 @endsection

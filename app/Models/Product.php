@@ -31,8 +31,8 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'unit_measurement' => 'integer',
-        'current_stock' => 'integer',
+        'unit_measurement' => 'decimal:2',
+        'current_stock' => 'decimal:2',
         'min_stock' => 'decimal:2',
         'unit_cost' => 'decimal:2',
         'historical_average_price' => 'decimal:2',

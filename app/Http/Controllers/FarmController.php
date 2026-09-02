@@ -10,7 +10,9 @@ class FarmController extends Controller
 {
     public function index()
     {
-        $farms = Farm::where('user_id', auth()->id())->latest()->paginate(15);
+        // Obtiene únicamente las fincas pertenecientes al usuario conectado
+        $farms = Farm::where('user_id', auth()->id())->latest()->paginate(10);
+
         return view('farms.index', compact('farms'));
     }
 
@@ -23,17 +25,17 @@ class FarmController extends Controller
     {
         // Obtenemos los datos ya validados por el FormRequest
         $validated = $request->validated();
-        
+
         // Le asignamos el ID del usuario autenticado en la sesión
         $validated['user_id'] = auth()->id();
-    
+
         // Creamos la finca
         Farm::create($validated);
-    
+
         // Redireccionamos a la lista con mensaje flash de éxito
         return redirect()->route('farms.index')->with('success', 'Finca guardada exitosamente.');
     }
-    
+
     public function show(Farm $farm)
     {
         $this->authorizeOwner($farm);
