@@ -44,7 +44,7 @@ class AnimalController extends Controller
     {
         $animal->load([
             'farm:id,name,user_id',
-            'treatments:id,animal_id,start_date,end_date,status',
+            'treatments:id,animal_id,start_date,end_date,active',
             'feedingRecords:id,animal_id,feeding_date',
             'gestationRecords:id,animal_id,service_date'
         ]);

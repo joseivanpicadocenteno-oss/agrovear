@@ -11,6 +11,8 @@ use App\Http\Controllers\GestationRecordController;
 use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\FeedingRecordController;
 
+use App\Http\Controllers\DashboardController;
+
 // Aplicar el grupo 'web' explícitamente
 Route::middleware(['web'])->group(function () {
 
@@ -20,6 +22,14 @@ Route::middleware(['web'])->group(function () {
         Route::post('/login', [LoginController::class, 'login']);
         Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
         Route::post('/register', [RegisterController::class, 'register']);
+    });
+
+    //Dashboard
+    Route::middleware('auth')->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
+
     });
 
     // Rutas protegidas (Requieren Login Web)
