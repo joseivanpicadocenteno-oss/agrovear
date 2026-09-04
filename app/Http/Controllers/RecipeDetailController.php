@@ -59,7 +59,7 @@ class RecipeDetailController extends Controller
         return response()->json([
             'message' => 'Ingrediente creado correctamente',
             'data' => $recipeDetail->load
-            ('recipe_id:name, product_id:name')
+            (['recipe_id:name, product_id:name'])
         ], 201);
     }
 
@@ -69,7 +69,10 @@ class RecipeDetailController extends Controller
     public function show(RecipeDetail $recipeDetail)
     {
 
-        $recipeDetail->load(['recipe:id,name', 'product:id_name']);
+        $recipeDetail->load([
+            'recipe:id,name', 
+            'product:id,name'
+        ]);
 
         if  ($recipeDetail->recipe->farm->user_id !== auth()->id()) {
             return response()->json([
@@ -98,7 +101,10 @@ class RecipeDetailController extends Controller
      */
     public function update(UpdateRecipeDetailRequest $request, RecipeDetail $recipeDetail)
     {
-        $recipeDetail->load(['recipe:id,name', 'product:id_name']);
+        $recipeDetail->load([
+            'recipe:id,name',
+            'product:id,name'
+        ]);
 
         if  ($recipeDetail->recipe->farm->user_id !== auth()->id()) {
             return response()->json([
@@ -122,7 +128,10 @@ class RecipeDetailController extends Controller
 
         return response()->json([
             'message' => 'Detalles de Receta actualizado correctamente.',
-            'data' => $recipeDetail->load('farm:id,name')
+            'data' => $recipeDetail->load([
+                'recipe:id,name',
+                'product:id,name'
+            ])
         ]);
     }
 
