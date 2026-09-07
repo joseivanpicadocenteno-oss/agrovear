@@ -4,53 +4,58 @@
 @section('page_title', 'Registrar Nuevo Animal')
 
 @section('content')
-<div class="max-w-2xl bg-white p-8 rounded-xl shadow-sm border border-stone-200">
-    <form action="{{ route('animals.store') }}" method="POST" class="space-y-5">
-        @csrf
 
-        <div>
-            <label class="block font-heading font-semibold text-tierra-fertil text-sm mb-1">Seleccionar Finca</label>
-            <select name="farm_id" required class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm bg-white">
-                <option value="" disabled selected>-- Elige una finca --</option>
-                @foreach($farms as $farm)
-                    <option value="{{ $farm->id }}" {{ old('farm_id') == $farm->id ? 'selected' : '' }}>{{ $farm->name }}</option>
-                @endforeach
-            </select>
-            @error('farm_id') <span class="text-xs text-red-600 font-semibold">{{ $message }}</span> @enderror
+<div class="max-w-5xl mx-auto">
+
+    {{-- Encabezado --}}
+    <div class="mb-6">
+        <div class="flex items-center gap-2 text-sm text-stone-500 mb-2">
+            <a href="{{ route('animals.index') }}" class="hover:text-verde-natural">
+                Animales
+            </a>
+
+            <span>/</span>
+
+            <span>Nuevo registro</span>
         </div>
 
-        <div class="grid grid-cols-3 gap-4">
-            <div>
-                <label class="block font-heading font-semibold text-tierra-fertil text-sm mb-1">Especie</label>
-                <select name="species" required class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm bg-white">
-                    <option value="Bovino">Bovino</option>
-                    <option value="Porcino">Porcino</option>
-                    <option value="Ovino">Ovino</option>
-                    <option value="Caprino">Caprino</option>
-                </select>
-                @error('species') <span class="text-xs text-red-600 font-semibold">{{ $message }}</span> @enderror
-            </div>
+        <h1 class="font-heading text-2xl font-bold text-tierra-fertil">
+            Registrar nuevo animal
+        </h1>
 
-            <div>
-                <label class="block font-heading font-semibold text-tierra-fertil text-sm mb-1">Sexo</label>
-                <select name="sex" required class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm bg-white">
-                    <option value="Macho">Macho</option>
-                    <option value="Hembra">Hembra</option>
-                </select>
-                @error('sex') <span class="text-xs text-red-600 font-semibold">{{ $message }}</span> @enderror
-            </div>
+        <p class="text-sm text-stone-500 mt-1">
+            Ingresa la información necesaria para incorporar un animal a tu finca.
+        </p>
+    </div>
 
-            <div>
-                <label class="block font-heading font-semibold text-tierra-fertil text-sm mb-1">Peso (kg)</label>
-                <input type="number" step="0.01" name="weight" value="{{ old('weight') }}" placeholder="Ej: 450.5" class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm">
-                @error('weight') <span class="text-xs text-red-600 font-semibold">{{ $message }}</span> @enderror
+    {{-- Errores generales --}}
+    @if($errors->any())
+        <div class="mb-6 rounded-xl border border-red-200 bg-red-50 p-4">
+            <div class="flex gap-3">
+                <div class="text-red-600 mt-0.5">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 8v4m0 4h.01M4.93 19h14.14c1.54 0 2.5-1.67 1.73-3L13.73 4c-.77-1.33-2.69-1.33-3.46 0L3.2 16c-.77 1.33.19 3 1.73 3z"/>
+                    </svg>
+                </div>
+
+                <div>
+                    <p class="font-semibold text-sm text-red-800">
+                        Revisa los datos ingresados
+                    </p>
+
+                    <p class="text-xs text-red-700 mt-1">
+                        Hay campos que necesitan corrección.
+                    </p>
+                </div>
             </div>
         </div>
+    @endif
 
-        <div class="flex justify-end space-x-3 pt-4 border-t border-stone-100">
-            <a href="{{ route('animals.index') }}" class="px-4 py-2 rounded-lg border border-stone-300 text-stone-600 hover:bg-stone-50 font-semibold text-sm">Cancelar</a>
-            <button type="submit" class="bg-verde-natural hover:bg-opacity-90 text-white font-heading font-bold px-5 py-2 rounded-lg shadow-sm text-sm">Guardar Animal</button>
-        </div>
-    </form>
+    <div class="bg-white rounded-2xl border border-stone-200 shadow-sm p-6 md:p-8">
+        @include('animals._form')
+    </div>
+
 </div>
+
 @endsection

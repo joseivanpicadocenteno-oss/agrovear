@@ -16,7 +16,7 @@ class StoreAnimalRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
 
-            'birth_date' => 'nullable|date',
+            'birth_date' => 'nullable|date|before_or_equal:today',
 
             'breed' => 'required|string|max:255',
 
@@ -24,7 +24,7 @@ class StoreAnimalRequest extends FormRequest
 
             'weight_kg' => 'required|numeric|min:0',
 
-            'last_weighing' => 'nullable|date',
+            'last_weighing' => 'nullable|date|before_or_equal:today',
 
             'target_weight' => 'nullable|numeric|min:0',
 
@@ -50,6 +50,7 @@ class StoreAnimalRequest extends FormRequest
             'name.max' => 'El nombre no puede tener más de 255 caracteres.',
 
             'birth_date.date' => 'La fecha de nacimiento no es válida.',
+            'birth_date.before_or_equal' => 'La fecha de nacimiento no puede ser futura.',
 
             'breed.required' => 'Se requiere la raza del animal.',
             'breed.string' => 'La raza debe contener texto.',
@@ -64,6 +65,7 @@ class StoreAnimalRequest extends FormRequest
             'weight_kg.min' => 'El peso no puede ser negativo.',
 
             'last_weighing.date' => 'La fecha de la última pesada no es válida.',
+            'last_weighing.before_or_equal' => 'La fecha de la última pesada no puede ser futura.',
 
             'target_weight.numeric' => 'El peso objetivo debe ser un valor numérico.',
             'target_weight.min' => 'El peso objetivo no puede ser negativo.',

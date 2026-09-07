@@ -1,46 +1,42 @@
-
 <?php
 
 namespace App\Models;
 
-use App\Models\User;
-use App\Models\Farm;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Animal extends Model
+class Alert extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
-        'farm_id',
+        'animal_id',
         'type',
         'title',
         'message',
         'severity',
         'read_at',
-        'created_at',
-        'updated_at',
     ];
 
     protected $casts = [
-        'read_at' => 'date',
-        'created_at' => 'date',        
-        'updated_at' => 'date'
+        'read_at' => 'datetime',
     ];
 
+    /**
+     * Usuario al que pertenece la alerta.
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function farm(): BelongsTo
+    /**
+     * Animal relacionado con la alerta.
+     */
+    public function animal(): BelongsTo
     {
-        return $this->belongsTo(Farm::class);
+        return $this->belongsTo(Animal::class);
     }
-
 }
