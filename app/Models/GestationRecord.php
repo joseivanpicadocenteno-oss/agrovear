@@ -43,3 +43,4 @@ class GestationRecord extends Model
         return $this->hasMany(FeedingRecord::class);
     }
 }
+

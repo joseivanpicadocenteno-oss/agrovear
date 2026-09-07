@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Farm;
+use App\Models\Alert;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
@@ -37,4 +38,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Farm::class);
     } 
+
+    public function alerts(): HasMany
+    {
+        return $this->hasMany(User::class);
+    }
 }

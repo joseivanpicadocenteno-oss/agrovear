@@ -20,7 +20,7 @@ class StoreProductRequest extends FormRequest
         return [
             'name' => 'string|required|max:255',
             'type' => 'required|string|max:255',
-            'unit_measurement' => 'required|integer',
+            'unit_measurement' => 'required|string|max:60',
             'current_stock' => 'required|integer',
             'min_stock' => 'required|numeric',
             'unit_cost' => 'required|numeric',
@@ -46,7 +46,8 @@ class StoreProductRequest extends FormRequest
         'type.max' => 'El tipo de producto no puede tener más de 255 caracteres.',
 
         'unit_measurement.required' => 'Se requiere la unidad de medida.',
-        'unit_measurement.integer' => 'La unidad de medida debe ser un número entero.',
+        'unit_measurement.string' => 'La unidad de medida debe ser en catacteres.',
+        'unit_measurement.max' => 'La unidad de medida tiene un maximo de 60 caracteres',
 
         'current_stock.required' => 'Se requiere el stock actual.',
         'current_stock.integer' => 'El stock actual debe ser un número entero.',

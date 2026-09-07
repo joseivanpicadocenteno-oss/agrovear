@@ -22,7 +22,7 @@ class GestationRecordController extends Controller
     {
         // Solo hembras de las fincas del usuario
         $animals = Animal::whereHas('farm', fn($q) => $q->where('user_id', auth()->id()))
-            ->where('sex', 'Femenino')
+            ->where('sex', 'Hembra')
             ->get();
 
         return view('gestations.create', compact('animals'));

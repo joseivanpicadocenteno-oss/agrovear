@@ -19,19 +19,6 @@
             @error('farm_id') <span class="text-xs text-red-600 font-semibold">{{ $message }}</span> @enderror
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
-            <div>
-                <label class="block font-heading font-semibold text-tierra-fertil text-sm mb-1">Nombre / Identificación</label>
-                <input type="text" name="name" value="{{ old('name') }}" placeholder="Ej: Vaca 04 - Lucero" required class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm">
-                @error('name') <span class="text-xs text-red-600 font-semibold">{{ $message }}</span> @enderror
-            </div>
-            <div>
-                <label class="block font-heading font-semibold text-tierra-fertil text-sm mb-1">Número de Chapa / Arete</label>
-                <input type="text" name="tag_number" value="{{ old('tag_number') }}" placeholder="Ej: CH-9082" class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm">
-                @error('tag_number') <span class="text-xs text-red-600 font-semibold">{{ $message }}</span> @enderror
-            </div>
-        </div>
-
         <div class="grid grid-cols-3 gap-4">
             <div>
                 <label class="block font-heading font-semibold text-tierra-fertil text-sm mb-1">Especie</label>

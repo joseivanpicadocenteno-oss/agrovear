@@ -24,7 +24,7 @@ class UpdateProductRequest extends FormRequest
         return [
             'name' => 'sometimes|string|max:255',
             'type' => 'sometimes|string|max:255',
-            'unit_measurement' => 'sometimes|integer',
+            'unit_measurement' => 'sometimes|string|max:60',
             'current_stock' => 'sometimes|integer',
             'min_stock' => 'sometimes|numeric',
             'unit_cost' => 'sometimes|numeric',
