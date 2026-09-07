@@ -31,13 +31,12 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'unit_measurement' => 'decimal:2',
-        'current_stock' => 'decimal:2',
-        'min_stock' => 'decimal:2',
-        'unit_cost' => 'decimal:2',
-        'historical_average_price' => 'decimal:2',
-        'last_purchase_date' => 'date',
-        'expiration_date' => 'date',
+     'current_stock' => 'decimal:2',
+     'min_stock' => 'decimal:2',
+     'unit_cost' => 'decimal:2',
+     'historical_average_price' => 'decimal:2',
+     'last_purchase_date' => 'date',
+     'expiration_date' => 'date',
     ];
 
     public function recipeDetails(): HasMany
