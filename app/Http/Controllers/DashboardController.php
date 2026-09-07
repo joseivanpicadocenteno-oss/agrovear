@@ -6,12 +6,13 @@ use App\Models\Farm;
 use App\Models\Animal;
 use App\Models\Product;
 use App\Models\Recipe;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $userId = auth()->id();
+        $userId = Auth::id();
 
         $farmsCount = Farm::where('user_id', $userId)->count();
 
