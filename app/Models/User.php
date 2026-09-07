@@ -34,6 +34,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function alerts(): HasMany
+    {
+        return $this->hasMany(Alert::class);
+    }
+    
     public function farms(): HasMany
     {
         return $this->hasMany(Farm::class);

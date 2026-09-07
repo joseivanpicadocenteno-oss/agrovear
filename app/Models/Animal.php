@@ -85,4 +85,9 @@ class Animal extends Model
     {
         return $this->belongsTo(Farm::class);
     }
+
+    public function alerts(): HasMany
+    {
+        return $this->hasMany(Alert::class);
+    }
 }
