@@ -30,9 +30,14 @@ class FeedingRecord extends Model
 
     public function calculateEstimatedCost(): float
     {
-    $cost = 0;
-    foreach ($this->recipe->recipeDetails as $detail) {
-    $cost += $detail->quantity * $detail->product->unit_cost;
+        if (!$this->recipe) {
+            return 0;
+        }
+    
+        return (float) $this->recipe->recipeDetails
+            ->sum(function ($detail) {
+                return $detail->quantity * ($detail->product->unit_cost ?? 0);
+            });
     }
 
     return $cost;
