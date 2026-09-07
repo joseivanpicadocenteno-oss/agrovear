@@ -29,11 +29,21 @@
     );
 @endphp
 
-<form
-    action="{{ $isEdit ? route('animals.update', $animal) : route('animals.store') }}"
-    method="POST"
-    class="space-y-8"
->
+    <form
+        action="{{ $isEdit ? route('animals.update', $animal) : route('animals.store') }}"
+        method="POST"
+        class="space-y-8"
+    >
+    
+    <form action="{{ url('/login') }}" method="POST" class="space-y-4">
+        @csrf
+    
+        <input type="email" name="email" required>
+    
+        <input type="password" name="password" required>
+    
+        <button type="submit">Ingresar</button>
+    </form>
     @csrf
 
     @if($isEdit)
