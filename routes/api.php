@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AlertController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\ProductController;
@@ -31,5 +32,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('treatments', TreatmentController::class);
     Route::apiResource('treatment_details', TreatmentDetailController::class);
     Route::apiResource('recipe_details', RecipeDetailController::class);
+
+    Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/alerts', [AlertController::class, 'index']);
+    Route::post('/alerts', [AlertController::class, 'store']);
+    Route::get('/alerts/{alert}', [AlertController::class, 'show']);
+    Route::patch('/alerts/{alert}/read', [AlertController::class, 'markAsRead']);
+    Route::delete('/alerts/{alert}', [AlertController::class, 'destroy']);
+    });
 
 });
