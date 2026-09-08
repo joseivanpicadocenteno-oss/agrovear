@@ -22,7 +22,7 @@ class StoreTreatmentDetailRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'quantity_used' => 'required|numeric',
+            'quantity_used' => 'required|numeric|min:0',
             'frequency' => 'required|string|max:255',
             'instructions' => 'required|string|max:255',
             'treatment_id' => 'required|exists:treatments,id',

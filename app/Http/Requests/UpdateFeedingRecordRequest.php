@@ -23,8 +23,8 @@ class UpdateFeedingRecordRequest extends FormRequest
     {
         return [
             'feeding_date' => 'sometimes|date',
-            'amount_served' => 'sometimes|numeric',
-            'estimated_feed_cost' => 'sometimes|numeric',
+            'amount_served' => 'sometimes|numeric|min:0',
+            'estimated_feed_cost' => 'sometimes|numeric|min:0',
             'animal_id' => 'sometimes|exists:animals,id',
             'gestation_record_id' => 'nullable|exists:gestation_records,id',
             'recipe_id' => 'sometimes|exists:recipes,id',

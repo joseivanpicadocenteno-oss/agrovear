@@ -24,8 +24,8 @@ class StoreFeedingRecordRequest extends FormRequest
     {
         return [
             'feeding_date' => 'required|date',
-            'amount_served' => 'required|numeric',
-            'estimated_feed_cost' => 'required|numeric',
+            'amount_served' => 'required|numeric|min:0',
+            'estimated_feed_cost' => 'required|numeric|min:0',
             'animal_id' => 'required|exists:animals,id',
             'gestation_record_id' => 'nullable|exists:gestation_records,id',
             'recipe_id' => 'required|exists:recipes,id',

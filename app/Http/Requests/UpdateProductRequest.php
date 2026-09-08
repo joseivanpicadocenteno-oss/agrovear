@@ -25,7 +25,7 @@ class UpdateProductRequest extends FormRequest
             'name' => 'sometimes|string|max:255',
             'type' => 'sometimes|string|max:255',
             'unit_measurement' => 'sometimes|string|max:60',
-            'current_stock' => 'sometimes|integer',
+            'current_stock' => 'sometimes|numeric',
             'min_stock' => 'sometimes|numeric',
             'unit_cost' => 'sometimes|numeric',
             'historical_average_price' => 'sometimes|numeric',

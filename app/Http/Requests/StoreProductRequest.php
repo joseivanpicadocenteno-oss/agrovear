@@ -21,14 +21,14 @@ class StoreProductRequest extends FormRequest
             'name' => 'string|required|max:255',
             'type' => 'required|string|max:255',
             'unit_measurement' => 'required|string|max:60',
-            'current_stock' => 'required|integer',
-            'min_stock' => 'required|numeric',
-            'unit_cost' => 'required|numeric',
-            'historical_average_price' => 'required|numeric',
+            'current_stock' => 'required|numeric|min:0',
+            'min_stock' => 'required|numeric|min:0',
+            'unit_cost' => 'required|numeric|min:0',
+            'historical_average_price' => 'required|numeric|min:0',
             'last_purchase_date' => 'required|date',
             'regular_supplier' => 'required|string|max:255',
             'batch' => 'required|string|max:255',
-            'expiration_date' => 'required|date',
+            'expiration_date' => 'required|date|after_or_equal:today',
             'farm_id' => 'required|exists:farms,id'
         ];
     }
@@ -54,12 +54,15 @@ class StoreProductRequest extends FormRequest
 
         'min_stock.required' => 'Se requiere el stock mínimo.',
         'min_stock.numeric' => 'El stock mínimo debe ser un valor numérico.',
+        'min_stock.min' => 'El valor numerico no puede ser menor que 0.',
 
         'unit_cost.required' => 'Se requiere el costo por unidad.',
         'unit_cost.numeric' => 'El costo por unidad debe ser un valor numérico.',
+        'unit_cost.min' => 'El valor numerico no puede ser menor que 0.',
 
         'historical_average_price.required' => 'Se requiere el precio promedio histórico.',
         'historical_average_price.numeric' => 'El precio promedio histórico debe ser un valor numérico.',
+        'historical_average_price.min' => 'El valor numerico no puede ser menor que 0.',
 
         'last_purchase_date.required' => 'Se requiere la fecha de la última compra.',
         'last_purchase_date.date' => 'La fecha de la última compra no es válida.',
@@ -75,8 +78,8 @@ class StoreProductRequest extends FormRequest
         'expiration_date.required' => 'Se requiere la fecha de vencimiento.',
         'expiration_date.date' => 'La fecha de vencimiento no es válida.',
 
-        'farms_id.required' => 'La identifiacion de granja es requerida.',
-        'farms_id.exists' => 'La granja seleccionada aun no es creada oh no existe.'
+        'farm_id.required' => 'La identifiacion de granja es requerida.',
+        'farm_id.exists' => 'La granja seleccionada aun no es creada oh no te pertenece.'
         ];
     }
 }

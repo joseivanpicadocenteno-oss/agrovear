@@ -29,7 +29,7 @@ class UpdateRecipeRequest extends FormRequest
         'filter_species' => 'sometimes|string|max:255',
         'min_age_filter' => 'sometimes|integer',
         'max_age_filter' => 'sometimes|integer',
-        'min_weight_filter' => 'sometimes|numeric',
+        'min_weight_filter' => 'sometimes|numeric|min:0',
         'recommended_duration_days' => 'sometimes|integer',
         'suitable_for_gestation' => 'sometimes|boolean',
         'suitable_for_location' => 'sometimes|boolean',

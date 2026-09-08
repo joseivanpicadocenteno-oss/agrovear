@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('type');
-            $table->integer('unit_measurement');
-            $table->integer('current_stock');
+            $table->string('unit_measurement', 60);
+            $table->decimal('current_stock', 10, 2);
             $table->decimal('min_stock', 10, 2);
             $table->decimal('unit_cost', 10, 2);
             $table->decimal('historical_average_price', 10, 2);

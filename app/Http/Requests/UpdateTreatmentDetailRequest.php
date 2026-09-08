@@ -22,7 +22,7 @@ class UpdateTreatmentDetailRequest extends FormRequest
     public function rules(): array
     {
         return [
-        'quantity_used' => 'sometimes|numeric',
+        'quantity_used' => 'sometimes|numeric|min:0',
         'frequency' => 'sometimes|string|max:255',
         'instructions' => 'sometimes|string|max:255',
         'treatment_id' => 'sometimes|exists:treatments,id',

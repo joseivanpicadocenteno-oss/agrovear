@@ -24,7 +24,7 @@ class StoreRecipeRequest extends FormRequest
             'filter_species' => 'required|string|max:255',
             'min_age_filter' => 'required|integer',
             'max_age_filter' => 'required|integer',
-            'min_weight_filter' => 'required|numeric',
+            'min_weight_filter' => 'required|numeric|min:0',
             'recommended_duration_days' => 'required|integer',
             'suitable_for_gestation' => 'boolean',
             'suitable_for_location' => 'boolean',
