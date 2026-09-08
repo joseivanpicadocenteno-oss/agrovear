@@ -9,13 +9,29 @@
 
     {{-- Breadcrumb --}}
     <div class="flex items-center gap-2 text-sm text-stone-500">
-        <a href="{{ route('animals.index') }}" class="hover:text-verde-natural">
-            Animales
-        </a>
+        <div class="flex flex-wrap items-center gap-3">
 
-        <span>/</span>
-
-        <span>{{ $animal->name }}</span>
+            <a
+                href="{{ route('dashboard') }}"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-lg
+                       border border-stone-300 bg-white
+                       text-[#603813] text-sm font-semibold
+                       hover:bg-stone-50 transition"
+            >
+                ← Dashboard
+            </a>
+        
+            <a
+                href="{{ route('animals.index') }}"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-lg
+                       border border-stone-300 bg-white
+                       text-[#603813] text-sm font-semibold
+                       hover:bg-stone-50 transition"
+            >
+                ← Animales
+            </a>
+        
+        </div>
     </div>
 
 

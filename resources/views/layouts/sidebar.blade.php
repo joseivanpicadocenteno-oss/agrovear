@@ -1,6 +1,6 @@
 <aside
     class="w-64 min-h-screen bg-[#603813] text-white
-           hidden lg:flex flex-col shadow-xl">
+           flex flex-col shadow-xl shrink-0">
 
     <div class="p-6 border-b border-white/10">
 
