@@ -493,28 +493,57 @@
         </div>
     </section>
 
-
     {{-- Botones --}}
     <div class="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-stone-100 pt-6">
-
+    
+        {{-- Guardar --}}
         <button
             type="submit"
-            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-verde-natural text-white font-heading font-bold text-sm shadow-sm hover:opacity-90 transition"
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-2
+                   px-6 py-3 rounded-xl
+                   bg-[#397C0E] text-white
+                   font-heading font-bold text-sm
+                   shadow-sm
+                   hover:bg-[#2f680b]
+                   transition"
         >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M5 13l4 4L19 7"/>
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                />
             </svg>
-
+        
             {{ $isEdit ? 'Guardar cambios' : 'Registrar animal' }}
         </button>
-
+    
+    
+        {{-- Cancelar --}}
         <a
-            href="{{ $isEdit ? route('animals.show', $animal) : route('animals.index') }}"
-            class="w-full sm:w-auto text-center px-5 py-3 rounded-xl border border-stone-300 text-stone-600 font-semibold text-sm hover:bg-stone-50 transition"
+            href="{{ route('dashboard') }}"
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-2
+                   px-5 py-3 rounded-xl
+                   border border-[#603813]
+                   text-[#603813]
+                   bg-white
+                   font-semibold text-sm
+                   hover:bg-stone-50
+                   transition"
         >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10 19l-7-7m0 0l7-7m-7 7h20"
+                />
+            </svg>
+        
             Cancelar
         </a>
-
+    
     </div>
+
 </form>
