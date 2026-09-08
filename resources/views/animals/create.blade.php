@@ -53,7 +53,7 @@
     @endif
 
     <div class="bg-white rounded-2xl border border-stone-200 shadow-sm p-6 md:p-8">
-        @include('animals._form')
+        @include('animals.form')
     </div>
 
 </div>

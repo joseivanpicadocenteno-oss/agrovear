@@ -35,6 +35,9 @@
         class="space-y-8"
     >
     
+    <form action="{{ route('login.submit') }}" method="POST">
+    @csrf
+
     <form action="{{ url('/login') }}" method="POST" class="space-y-4">
         @csrf
     
@@ -45,6 +48,7 @@
         <button type="submit">Ingresar</button>
     </form>
     @csrf
+
 
     @if($isEdit)
         @method('PUT')

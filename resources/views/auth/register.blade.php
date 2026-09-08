@@ -16,8 +16,8 @@
             </div>
         @endif
 
-        <form action="{{ route('register') }}" method="POST" class="space-y-4">
-            @csrf
+        <form action="{{ route('register.submit') }}" method="POST">
+        @csrf
             <div>
                 <label class="block text-xs font-bold text-[#76502F] mb-1">Nombre Completo</label>
                 <input type="text" name="name" value="{{ old('name') }}" required class="w-full border-stone-300 rounded-lg p-2.5 border text-sm focus:outline-none focus:ring-2 focus:ring-[#397C02]">

@@ -53,7 +53,7 @@ class AnimalController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        // Estadísticas generales del usuario
+        // Estadísticas
         $baseQuery = Animal::whereHas('farm', function ($query) use ($userId) {
             $query->where('user_id', $userId);
         });
@@ -80,16 +80,13 @@ class AnimalController extends Controller
 
     public function create()
     {
-        $animals = Animal::whereHas(
-            'farm',
-            fn($q) => $q->where('user_id', auth()->id())
-        )
-            ->where('sex', 'Hembra')
+        $farms = auth()->user()
+            ->farms()
             ->where('active', true)
             ->orderBy('name')
             ->get();
 
-        return view('gestations.create', compact('animals'));
+        return view('animals.create', compact('farms'));
     }
 
     public function store(StoreAnimalRequest $request)
@@ -169,20 +166,24 @@ class AnimalController extends Controller
         return view('animals.show', compact('animal'));
     }
 
-    public function edit(GestationRecord $gestation)
+    public function edit(Animal $animal)
     {
-        $this->authorizeOwner($gestation);
-    
-        $animals = Animal::whereHas(
-            'farm',
-            fn($q) => $q->where('user_id', auth()->id())
-        )
-            ->where('sex', 'Hembra')
+        $animal->load('farm:id,name,user_id');
+
+        if (!$animal->farm || $animal->farm->user_id !== auth()->id()) {
+            abort(403, 'No tienes permiso para editar este animal.');
+        }
+
+        $farms = auth()->user()
+            ->farms()
             ->where('active', true)
             ->orderBy('name')
             ->get();
-        
-        return view('gestations.edit', compact('gestation', 'animals'));
+
+        return view('animals.edit', compact(
+            'animal',
+            'farms'
+        ));
     }
 
     public function update(UpdateAnimalRequest $request, Animal $animal)
@@ -199,7 +200,10 @@ class AnimalController extends Controller
             ->find($request->farm_id);
 
         if (!$farm) {
-            abort(403, 'No puedes mover el animal a una finca que no te pertenece o está inactiva.');
+            abort(
+                403,
+                'No puedes mover el animal a una finca que no te pertenece o está inactiva.'
+            );
         }
 
         $data = $request->validated();

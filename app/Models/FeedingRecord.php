@@ -40,7 +40,7 @@ class FeedingRecord extends Model
             });
     }
 
-    return $cost;
+    return $cost
     }
 
     public function animal(): BelongsTo
