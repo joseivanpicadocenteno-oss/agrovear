@@ -38,9 +38,8 @@ class FeedingRecord extends Model
             ->sum(function ($detail) {
                 return $detail->quantity * ($detail->product->unit_cost ?? 0);
             });
-    }
 
-    return $cost
+    return $cost;
     }
 
     public function animal(): BelongsTo
