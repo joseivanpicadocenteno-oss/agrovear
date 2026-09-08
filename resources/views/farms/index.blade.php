@@ -4,12 +4,63 @@
 @section('page_title', 'Listado de Fincas')
 
 @section('content')
-<div class="flex justify-between items-center mb-6">
-    <p class="text-stone-600 text-sm">Gestiona los predios registrados bajo tu cuenta.</p>
-    <a href="{{ route('farms.create') }}" class="bg-verde-natural hover:bg-opacity-90 text-white font-heading font-bold px-4 py-2 rounded-lg text-sm shadow-sm transition">
-        + Nueva Finca
-    </a>
-</div>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+
+    <div>
+        <p class="text-stone-600 text-sm">
+            Gestiona los predios registrados bajo tu cuenta.
+        </p>
+    </div>
+
+    <div class="flex items-center gap-3">
+
+        {{-- Volver al Dashboard --}}
+        <a
+            href="{{ route('dashboard') }}"
+            class="inline-flex items-center gap-2
+                   px-4 py-2 rounded-lg
+                   border border-stone-300
+                   bg-white
+                   text-[#603813]
+                   text-sm font-semibold
+                   hover:bg-stone-50
+                   transition"
+        >
+            <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10 19l-7-7m0 0l7-7m7 7H3"
+                />
+            </svg>
+
+            Dashboard
+        </a>
+
+        {{-- Nueva finca --}}
+        <a
+            href="{{ route('farms.create') }}"
+            class="inline-flex items-center gap-2
+                   px-4 py-2 rounded-lg
+                   bg-[#397C0E]
+                   text-white
+                   text-sm font-bold
+                   shadow-sm
+                   hover:bg-[#2f680b]
+                   transition"
+        >
+            + Nueva Finca
+        </a>
+
+    </div>
+
+    </div>
 
 <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">
     <table class="w-full text-left border-collapse">

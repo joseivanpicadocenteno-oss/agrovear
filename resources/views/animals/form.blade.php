@@ -1,18 +1,18 @@
 @php
         $isEdit = isset($animal);
-
+    
         $speciesOptions = [
             'Bovino',
             'Porcino',
             'Ovino',
             'Caprino',
         ];
-
+    
         $sexOptions = [
             'Macho',
             'Hembra',
         ];
-
+    
         $reproductiveOptions = [
             'No aplica',
             'Sin determinar',
@@ -22,13 +22,13 @@
             'Lactando',
             'Descanso reproductivo',
         ];
-
+    
         $currentReproductiveStatus = old(
             'reproductive_status',
             $animal->reproductive_status ?? 'Sin determinar'
         );
     @endphp
-
+    
     <form
         action="{{ $isEdit ? route('animals.update', $animal) : route('animals.store') }}"
         method="POST"
@@ -495,7 +495,7 @@
 
     {{-- Botones --}}
     <div class="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-stone-100 pt-6">
-    
+
         {{-- Guardar --}}
         <button
             type="submit"
@@ -515,11 +515,11 @@
                     d="M5 13l4 4L19 7"
                 />
             </svg>
-        
+
             {{ $isEdit ? 'Guardar cambios' : 'Registrar animal' }}
         </button>
-    
-    
+
+
         {{-- Cancelar --}}
         <a
             href="{{ route('dashboard') }}"
@@ -540,10 +540,10 @@
                     d="M10 19l-7-7m0 0l7-7m-7 7h20"
                 />
             </svg>
-        
+
             Cancelar
         </a>
-    
+
     </div>
 
 </form>
