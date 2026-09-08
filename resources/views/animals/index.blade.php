@@ -7,6 +7,7 @@
 
 <div class="space-y-6">
 
+
     {{-- Encabezado --}}
     <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
 
@@ -24,19 +25,69 @@
             </p>
         </div>
 
-        <a
-            href="{{ route('animals.create') }}"
-            class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-verde-natural text-white font-heading font-bold text-sm shadow-sm hover:opacity-90 transition"
-        >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M12 4v16m8-8H4"/>
-            </svg>
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
 
-            Registrar animal
-        </a>
+            {{-- Volver al Dashboard --}}
+            <a
+                href="{{ route('dashboard') }}"
+                class="inline-flex items-center justify-center gap-2
+                       px-4 py-3 rounded-xl
+                       border border-stone-300
+                       bg-white
+                       text-[#603813]
+                       font-semibold text-sm
+                       hover:bg-stone-50
+                       transition"
+            >
+                <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m7 7H3"
+                    />
+                </svg>
+
+                Dashboard
+            </a>
+
+            {{-- Registrar animal --}}
+            <a
+                href="{{ route('animals.create') }}"
+                class="inline-flex items-center justify-center gap-2
+                       px-5 py-3 rounded-xl
+                       bg-[#397C0E]
+                       text-white
+                       font-heading font-bold text-sm
+                       shadow-sm
+                       hover:bg-[#2f680b]
+                       transition"
+            >
+                <svg
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 4v16m8-8H4"
+                    />
+                </svg>
+
+                Registrar animal
+            </a>
+
+        </div>
+
     </div>
-
 
     {{-- Mensaje --}}
     @if(session('success'))
