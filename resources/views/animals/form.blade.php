@@ -1,54 +1,40 @@
 @php
-    $isEdit = isset($animal);
+        $isEdit = isset($animal);
 
-    $speciesOptions = [
-        'Bovino',
-        'Porcino',
-        'Ovino',
-        'Caprino',
-    ];
+        $speciesOptions = [
+            'Bovino',
+            'Porcino',
+            'Ovino',
+            'Caprino',
+        ];
 
-    $sexOptions = [
-        'Macho',
-        'Hembra',
-    ];
+        $sexOptions = [
+            'Macho',
+            'Hembra',
+        ];
 
-    $reproductiveOptions = [
-        'No aplica',
-        'Sin determinar',
-        'Reproductor',
-        'En celo',
-        'Gestante',
-        'Lactando',
-        'Descanso reproductivo',
-    ];
+        $reproductiveOptions = [
+            'No aplica',
+            'Sin determinar',
+            'Reproductor',
+            'En celo',
+            'Gestante',
+            'Lactando',
+            'Descanso reproductivo',
+        ];
 
-    $currentReproductiveStatus = old(
-        'reproductive_status',
-        $animal->reproductive_status ?? 'Sin determinar'
-    );
-@endphp
+        $currentReproductiveStatus = old(
+            'reproductive_status',
+            $animal->reproductive_status ?? 'Sin determinar'
+        );
+    @endphp
 
     <form
         action="{{ $isEdit ? route('animals.update', $animal) : route('animals.store') }}"
         method="POST"
         class="space-y-8"
     >
-    
-    <form action="{{ route('login.submit') }}" method="POST">
     @csrf
-
-    <form action="{{ url('/login') }}" method="POST" class="space-y-4">
-        @csrf
-    
-        <input type="email" name="email" required>
-    
-        <input type="password" name="password" required>
-    
-        <button type="submit">Ingresar</button>
-    </form>
-    @csrf
-
 
     @if($isEdit)
         @method('PUT')
@@ -511,13 +497,6 @@
     {{-- Botones --}}
     <div class="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-stone-100 pt-6">
 
-        <a
-            href="{{ $isEdit ? route('animals.show', $animal) : route('animals.index') }}"
-            class="w-full sm:w-auto text-center px-5 py-3 rounded-xl border border-stone-300 text-stone-600 font-semibold text-sm hover:bg-stone-50 transition"
-        >
-            Cancelar
-        </a>
-
         <button
             type="submit"
             class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-verde-natural text-white font-heading font-bold text-sm shadow-sm hover:opacity-90 transition"
@@ -529,5 +508,13 @@
 
             {{ $isEdit ? 'Guardar cambios' : 'Registrar animal' }}
         </button>
+
+        <a
+            href="{{ $isEdit ? route('animals.show', $animal) : route('animals.index') }}"
+            class="w-full sm:w-auto text-center px-5 py-3 rounded-xl border border-stone-300 text-stone-600 font-semibold text-sm hover:bg-stone-50 transition"
+        >
+            Cancelar
+        </a>
+
     </div>
 </form>

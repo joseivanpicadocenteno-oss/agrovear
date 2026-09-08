@@ -93,7 +93,6 @@
 
     </section>
 
-
     {{-- Acciones rápidas --}}
     <section>
 
@@ -101,23 +100,57 @@
             Acciones rápidas
         </h3>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
 
-            <a href="{{ route('animals.create') }}"
+            {{-- Registrar finca --}}
+            <a href="{{ route('farms.create') }}"
                class="bg-[#397C0E] text-white rounded-xl p-5
                       hover:shadow-lg transition">
 
                 <p class="font-heading font-bold text-lg">
-                    Registrar animal
+                    Registrar finca
                 </p>
 
                 <p class="text-sm text-white/80 mt-1">
+                    Registra una nueva finca en tu cuenta.
+                </p>
+
+            </a>
+
+
+            {{-- Gestionar fincas --}}
+            <a href="{{ route('farms.index') }}"
+               class="bg-white border border-stone-200 rounded-xl
+                      p-5 hover:shadow-lg transition">
+
+                <p class="font-heading font-bold text-lg text-[#603813]">
+                    Gestionar fincas
+                </p>
+
+                <p class="text-sm text-stone-500 mt-1">
+                    Consulta, edita y elimina tus fincas.
+                </p>
+
+            </a>
+
+
+            {{-- Registrar animal --}}
+            <a href="{{ route('animals.create') }}"
+               class="bg-white border border-stone-200 rounded-xl
+                      p-5 hover:shadow-lg transition">
+
+                <p class="font-heading font-bold text-lg text-[#603813]">
+                    Registrar animal
+                </p>
+
+                <p class="text-sm text-stone-500 mt-1">
                     Agrega un nuevo animal a una finca.
                 </p>
 
             </a>
 
 
+            {{-- Registrar producto --}}
             <a href="{{ route('products.create') }}"
                class="bg-white border border-stone-200 rounded-xl
                       p-5 hover:shadow-lg transition">
@@ -133,6 +166,7 @@
             </a>
 
 
+            {{-- Crear receta --}}
             <a href="{{ route('recipes.create') }}"
                class="bg-white border border-stone-200 rounded-xl
                       p-5 hover:shadow-lg transition">
@@ -148,6 +182,7 @@
             </a>
 
 
+            {{-- Registrar alimentación --}}
             <a href="{{ route('feedings.create') }}"
                class="bg-[#F2A900] rounded-xl p-5
                       hover:shadow-lg transition">
