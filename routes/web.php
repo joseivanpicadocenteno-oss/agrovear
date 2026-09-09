@@ -16,6 +16,7 @@ use App\Http\Controllers\GestationRecordController;
 use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\FeedingRecordController;
 use App\Http\Controllers\AlertController;
+use App\Http\Controllers\RecipeDetailController;
 
 /*
  Rutas públicas
@@ -75,4 +76,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('feedings', FeedingRecordController::class);
 
     Route::resource('alerts', AlertController::class);
+    
+    Route::resource('recipe-details', RecipeDetailController::class)
+    ->middleware('auth');
 });

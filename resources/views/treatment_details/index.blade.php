@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Recetas')
-@section('page_title', 'Recetas alimenticias')
+@section('title', 'Ingredientes de Recetas')
+@section('page_title', 'Ingredientes de recetas')
 
 @section('content')
 
@@ -13,35 +13,43 @@
 
     <div>
         <p class="text-sm text-stone-500 mb-1">
-            Gestión de recetas
+            Recetas / Ingredientes
         </p>
 
         <h2 class="font-heading font-bold text-2xl text-tierra-fertil">
-            Recetas alimenticias
+            Ingredientes de recetas
         </h2>
 
         <p class="text-sm text-stone-500 mt-1">
-            Administra tus recetas y los ingredientes de cada dieta.
+            Consulta y administra los productos utilizados en las recetas.
         </p>
     </div>
 
+    <div class="flex flex-wrap gap-2">
 
-    <a
-        href="{{ route('recipes.create') }}"
-        class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-verde-natural text-white font-heading font-bold text-sm shadow-sm hover:opacity-90"
-    >
-        + Nueva receta
-    </a>
+        <a
+            href="{{ route('recipes.index') }}"
+            class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl border border-stone-300 bg-white text-tierra-fertil text-sm font-semibold hover:bg-stone-50 transition"
+        >
+            ← Recetas
+        </a>
 
+        <a
+            href="{{ route('recipe-details.create') }}"
+            class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-verde-natural text-white text-sm font-bold hover:opacity-90 transition"
+        >
+            + Nuevo ingrediente
+        </a>
+
+    </div>
 </div>
 
 
-{{-- Contenido --}}
+{{-- Tabla --}}
 <div class="bg-white border border-stone-200 rounded-2xl shadow-sm overflow-hidden">
 
-    @if($recipes->count())
+    @if($recipeDetails->count())
 
-        {{-- Tabla --}}
         <div class="hidden md:block overflow-x-auto">
 
             <table class="w-full text-sm">
@@ -59,15 +67,15 @@
                         </th>
 
                         <th class="text-left px-6 py-4 font-heading font-bold text-tierra-fertil">
-                            Especie
-                        </th>
-
-                        <th class="text-left px-6 py-4 font-heading font-bold text-tierra-fertil">
-                            Objetivo
+                            Producto
                         </th>
 
                         <th class="text-center px-6 py-4 font-heading font-bold text-tierra-fertil">
-                            Ingredientes
+                            Cantidad
+                        </th>
+
+                        <th class="text-left px-6 py-4 font-heading font-bold text-tierra-fertil">
+                            Instrucción
                         </th>
 
                         <th class="text-right px-6 py-4 font-heading font-bold text-tierra-fertil">
@@ -81,50 +89,55 @@
 
                 <tbody class="divide-y divide-stone-100">
 
-                    @foreach($recipes as $recipe)
+                    @foreach($recipeDetails as $detail)
 
                         <tr class="hover:bg-stone-50 transition">
 
                             <td class="px-6 py-4">
 
-                                <p class="font-bold text-stone-700">
-                                    {{ $recipe->name }}
-                                </p>
-
-                                @if($recipe->description)
-                                    <p class="text-xs text-stone-400 mt-1 max-w-xs truncate">
-                                        {{ $recipe->description }}
-                                    </p>
-                                @endif
+                                <a
+                                    href="{{ route('recipes.show', $detail->recipe) }}"
+                                    class="font-bold text-verde-natural hover:underline"
+                                >
+                                    {{ $detail->recipe->name ?? 'Sin receta' }}
+                                </a>
 
                             </td>
 
 
                             <td class="px-6 py-4 text-stone-600">
-                                {{ $recipe->farm->name ?? 'Sin finca' }}
+                                {{ $detail->recipe->farm->name ?? 'Sin finca' }}
                             </td>
 
 
                             <td class="px-6 py-4">
 
-                                <span class="inline-flex px-2.5 py-1 rounded-full bg-green-50 text-verde-natural text-xs font-bold">
-                                    {{ $recipe->filter_species ?: 'Todas' }}
-                                </span>
+                                <p class="font-semibold text-stone-700">
+                                    {{ $detail->product->name ?? 'Producto eliminado' }}
+                                </p>
 
-                            </td>
+                                @if($detail->product?->unit_measurement)
 
+                                    <p class="text-xs text-stone-400 mt-1">
+                                        {{ $detail->product->unit_measurement }}
+                                    </p>
 
-                            <td class="px-6 py-4 text-stone-600">
-                                {{ $recipe->objective ?: 'Sin definir' }}
+                                @endif
+
                             </td>
 
 
                             <td class="px-6 py-4 text-center">
 
-                                <span class="inline-flex min-w-8 justify-center px-2.5 py-1 rounded-lg bg-stone-100 text-stone-600 text-xs font-bold">
-                                    {{ $recipe->recipeDetails->count() }}
+                                <span class="inline-flex px-3 py-1.5 rounded-lg bg-stone-100 text-stone-700 text-xs font-bold">
+                                    {{ number_format((float) $detail->quantity, 2) }}
                                 </span>
 
+                            </td>
+
+
+                            <td class="px-6 py-4 text-stone-600 max-w-xs">
+                                {{ $detail->instruction }}
                             </td>
 
 
@@ -133,7 +146,7 @@
                                 <div class="flex items-center justify-end gap-2">
 
                                     <a
-                                        href="{{ route('recipes.show', $recipe) }}"
+                                        href="{{ route('recipe-details.show', $detail) }}"
                                         class="px-3 py-2 rounded-lg border border-stone-300 text-stone-600 text-xs font-bold hover:bg-stone-50"
                                     >
                                         Ver
@@ -141,7 +154,7 @@
 
 
                                     <a
-                                        href="{{ route('recipes.edit', $recipe) }}"
+                                        href="{{ route('recipe-details.edit', $detail) }}"
                                         class="px-3 py-2 rounded-lg bg-amber-50 text-amber-700 text-xs font-bold hover:bg-amber-100"
                                     >
                                         Editar
@@ -149,9 +162,9 @@
 
 
                                     <form
-                                        action="{{ route('recipes.destroy', $recipe) }}"
+                                        action="{{ route('recipe-details.destroy', $detail) }}"
                                         method="POST"
-                                        onsubmit="return confirm('¿Seguro que deseas eliminar esta receta?')"
+                                        onsubmit="return confirm('¿Seguro que deseas eliminar este ingrediente?')"
                                     >
                                         @csrf
                                         @method('DELETE')
@@ -179,29 +192,30 @@
         </div>
 
 
-        {{-- Móvil --}}
+        {{-- Vista móvil --}}
         <div class="md:hidden divide-y divide-stone-100">
 
-            @foreach($recipes as $recipe)
+            @foreach($recipeDetails as $detail)
 
                 <div class="p-5">
 
                     <div class="flex items-start justify-between gap-4">
 
                         <div>
-                            <h3 class="font-heading font-bold text-base text-tierra-fertil">
-                                {{ $recipe->name }}
-                            </h3>
+                            <a
+                                href="{{ route('recipes.show', $detail->recipe) }}"
+                                class="font-heading font-bold text-base text-verde-natural hover:underline"
+                            >
+                                {{ $detail->recipe->name ?? 'Sin receta' }}
+                            </a>
 
                             <p class="text-xs text-stone-500 mt-1">
-                                {{ $recipe->farm->name ?? 'Sin finca' }}
+                                {{ $detail->recipe->farm->name ?? 'Sin finca' }}
                             </p>
                         </div>
 
-
-                        <span class="px-2.5 py-1 rounded-full bg-green-50 text-verde-natural text-xs font-bold">
-                            {{ $recipe->recipeDetails->count() }}
-                            ing.
+                        <span class="px-2.5 py-1 rounded-lg bg-stone-100 text-stone-600 text-xs font-bold">
+                            {{ number_format((float) $detail->quantity, 2) }}
                         </span>
 
                     </div>
@@ -209,25 +223,25 @@
 
                     <div class="mt-4 space-y-2">
 
-                        <div class="flex justify-between gap-4 text-sm">
-                            <span class="text-stone-400">
-                                Especie
-                            </span>
+                        <div>
+                            <p class="text-xs text-stone-400">
+                                Producto
+                            </p>
 
-                            <span class="font-semibold text-stone-700">
-                                {{ $recipe->filter_species ?: 'Todas' }}
-                            </span>
+                            <p class="text-sm font-semibold text-stone-700">
+                                {{ $detail->product->name ?? 'Producto eliminado' }}
+                            </p>
                         </div>
 
 
-                        <div class="flex justify-between gap-4 text-sm">
-                            <span class="text-stone-400">
-                                Objetivo
-                            </span>
+                        <div>
+                            <p class="text-xs text-stone-400">
+                                Instrucción
+                            </p>
 
-                            <span class="font-semibold text-stone-700">
-                                {{ $recipe->objective ?: 'Sin definir' }}
-                            </span>
+                            <p class="text-sm text-stone-600">
+                                {{ $detail->instruction }}
+                            </p>
                         </div>
 
                     </div>
@@ -236,25 +250,23 @@
                     <div class="flex flex-wrap gap-2 mt-5">
 
                         <a
-                            href="{{ route('recipes.show', $recipe) }}"
+                            href="{{ route('recipe-details.show', $detail) }}"
                             class="px-3 py-2 rounded-lg border border-stone-300 text-stone-600 text-xs font-bold"
                         >
                             Ver
                         </a>
 
-
                         <a
-                            href="{{ route('recipes.edit', $recipe) }}"
+                            href="{{ route('recipe-details.edit', $detail) }}"
                             class="px-3 py-2 rounded-lg bg-amber-50 text-amber-700 text-xs font-bold"
                         >
                             Editar
                         </a>
 
-
                         <form
-                            action="{{ route('recipes.destroy', $recipe) }}"
+                            action="{{ route('recipe-details.destroy', $detail) }}"
                             method="POST"
-                            onsubmit="return confirm('¿Seguro que deseas eliminar esta receta?')"
+                            onsubmit="return confirm('¿Seguro que deseas eliminar este ingrediente?')"
                         >
                             @csrf
                             @method('DELETE')
@@ -291,7 +303,7 @@
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         stroke-width="2"
-                        d="M9 5h6m-6 4h6m-8 4h10m-8 4h6M5 5h.01M5 9h.01M5 13h.01M5 17h.01"
+                        d="M12 6v12m6-6H6"
                     />
                 </svg>
 
@@ -299,20 +311,20 @@
 
 
             <h3 class="font-heading font-bold text-lg text-tierra-fertil">
-                No hay recetas registradas
+                No hay ingredientes registrados
             </h3>
 
 
-            <p class="text-sm text-stone-500 mt-2 max-w-md mx-auto">
-                Registra una receta alimenticia y agrega sus ingredientes para comenzar.
+            <p class="text-sm text-stone-500 mt-2">
+                Agrega el primer ingrediente a una receta.
             </p>
 
 
             <a
-                href="{{ route('recipes.create') }}"
+                href="{{ route('recipe-details.create') }}"
                 class="inline-flex items-center gap-2 mt-5 px-5 py-3 rounded-xl bg-verde-natural text-white text-sm font-bold hover:opacity-90"
             >
-                + Registrar receta
+                + Nuevo ingrediente
             </a>
 
         </div>
@@ -322,11 +334,10 @@
 </div>
 
 
-{{-- Paginación --}}
-@if($recipes->hasPages())
+@if($recipeDetails->hasPages())
 
     <div class="mt-6">
-        {{ $recipes->links() }}
+        {{ $recipeDetails->links() }}
     </div>
 
 @endif
