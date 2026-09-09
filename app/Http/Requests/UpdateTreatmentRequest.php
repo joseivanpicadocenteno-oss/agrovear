@@ -15,8 +15,8 @@ class UpdateTreatmentRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|max:255',
-            'start_date' => 'sometimes|date',
-            'end_date' => 'sometimes|date',
+            'start_date' => 'sometimes|date|after_or_equal:start_date',
+            'end_date' => 'sometimes|date|after_or_equal:start_date',
             'diagnosis' => 'sometimes|string|max:500',
             'observations' => 'sometimes|nullable|string|max:255',
             'active' => 'sometimes|boolean',

@@ -24,8 +24,8 @@ class StoreTreatmentRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'start_date' => 'required|date|after_or_equal:start_date',
+            'end_date' => 'required|date|after_or_equal:start_date',
             'diagnosis' => 'required|string|max:500',
             'observations' => 'nullable|string|max:255',
             'active' => 'boolean',
