@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Nueva Alimentación')
-@section('page_title', 'Registrar Alimentación')
+@section('title', 'Editar Alimentación')
+@section('page_title', 'Editar Registro de Alimentación')
 
 @section('content')
 
@@ -10,22 +10,23 @@
     <div class="mb-6">
 
         <h2 class="text-2xl font-heading font-bold text-tierra-fertil">
-            Registrar Alimentación
+            Editar Alimentación
         </h2>
 
         <p class="text-sm text-stone-500 mt-1">
-            Registra la cantidad de alimento suministrada a un animal.
+            Modifica el registro del {{ $feeding->feeding_date?->format('d/m/Y') }}.
         </p>
 
     </div>
 
     <div class="bg-white p-8 rounded-xl shadow-sm border border-stone-200">
 
-        <form action="{{ route('feedings.store') }}"
+        <form action="{{ route('feedings.update', $feeding) }}"
               method="POST"
               class="space-y-6">
 
             @csrf
+            @method('PUT')
 
             <div>
 
@@ -39,14 +40,10 @@
                         required
                         class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm bg-white">
 
-                    <option value="" disabled {{ old('animal_id') ? '' : 'selected' }}>
-                        -- Selecciona el animal --
-                    </option>
-
-                    @forelse($animals as $animal)
+                    @foreach($animals as $animal)
 
                         <option value="{{ $animal->id }}"
-                            {{ old('animal_id') == $animal->id ? 'selected' : '' }}>
+                            {{ old('animal_id', $feeding->animal_id) == $animal->id ? 'selected' : '' }}>
 
                             {{ $animal->name }}
 
@@ -56,13 +53,7 @@
 
                         </option>
 
-                    @empty
-
-                        <option disabled>
-                            No hay animales registrados
-                        </option>
-
-                    @endforelse
+                    @endforeach
 
                 </select>
 
@@ -86,26 +77,16 @@
                         required
                         class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm bg-white">
 
-                    <option value="" disabled {{ old('recipe_id') ? '' : 'selected' }}>
-                        -- Selecciona la receta --
-                    </option>
-
-                    @forelse($recipes as $recipe)
+                    @foreach($recipes as $recipe)
 
                         <option value="{{ $recipe->id }}"
-                            {{ old('recipe_id') == $recipe->id ? 'selected' : '' }}>
+                            {{ old('recipe_id', $feeding->recipe_id) == $recipe->id ? 'selected' : '' }}>
 
                             {{ $recipe->name }} — {{ $recipe->filter_species }}
 
                         </option>
 
-                    @empty
-
-                        <option disabled>
-                            No hay recetas registradas
-                        </option>
-
-                    @endforelse
+                    @endforeach
 
                 </select>
 
@@ -123,13 +104,13 @@
 
                     <label for="feeding_date"
                            class="block font-heading font-semibold text-tierra-fertil text-sm mb-1">
-                        Fecha de alimentación
+                        Fecha
                     </label>
 
                     <input type="date"
                            id="feeding_date"
                            name="feeding_date"
-                           value="{{ old('feeding_date', now()->format('Y-m-d')) }}"
+                           value="{{ old('feeding_date', $feeding->feeding_date?->format('Y-m-d')) }}"
                            required
                            class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm">
 
@@ -151,10 +132,9 @@
                     <input type="number"
                            id="amount_served"
                            name="amount_served"
-                           value="{{ old('amount_served') }}"
+                           value="{{ old('amount_served', $feeding->amount_served) }}"
                            min="0"
                            step="0.01"
-                           placeholder="Ej: 2.50"
                            required
                            class="w-full border-stone-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-verde-natural outline-none text-sm">
 
@@ -171,11 +151,16 @@
             <div class="rounded-xl bg-green-50 border border-green-200 p-4">
 
                 <p class="text-sm font-semibold text-green-800">
-                    Costo estimado automático
+                    Costo automático
                 </p>
 
                 <p class="text-xs text-green-700 mt-1">
-                    Agrovear calculará automáticamente el costo utilizando los productos y costos asociados a la receta.
+                    Al guardar, Agrovear volverá a calcular el costo según la receta seleccionada.
+                </p>
+
+                <p class="text-sm font-bold text-green-800 mt-2">
+                    Costo actual:
+                    C$ {{ number_format((float) $feeding->estimated_feed_cost, 2) }}
                 </p>
 
             </div>
@@ -199,7 +184,7 @@
                     @foreach($gestationRecords as $gestation)
 
                         <option value="{{ $gestation->id }}"
-                            {{ old('gestation_record_id') == $gestation->id ? 'selected' : '' }}>
+                            {{ old('gestation_record_id', $feeding->gestation_record_id) == $gestation->id ? 'selected' : '' }}>
 
                             {{ $gestation->animal->name ?? 'Animal' }}
                             — Registro #{{ $gestation->id }}
@@ -218,16 +203,25 @@
 
             </div>
 
-            <div class="flex flex-col sm:flex-row justify-end gap-3 pt-5 border-t border-stone-100">
+            <div class="flex flex-col sm:flex-row justify-between gap-3 pt-5 border-t border-stone-100">
 
-                <a href="{{ route('feedings.index') }}"
-                   class="px-5 py-2.5 rounded-lg border border-stone-300 text-stone-600 hover:bg-stone-50 font-semibold text-sm text-center">
-                    Cancelar
-                </a>
+                <div class="flex gap-3">
+
+                    <a href="{{ route('feedings.index') }}"
+                       class="px-5 py-2.5 rounded-lg border border-stone-300 text-stone-600 hover:bg-stone-50 font-semibold text-sm">
+                        Cancelar
+                    </a>
+
+                    <a href="{{ route('feedings.show', $feeding) }}"
+                       class="px-5 py-2.5 rounded-lg border border-stone-300 text-stone-600 hover:bg-stone-50 font-semibold text-sm">
+                        Ver registro
+                    </a>
+
+                </div>
 
                 <button type="submit"
                         class="px-5 py-2.5 rounded-lg bg-verde-natural hover:bg-opacity-90 text-white font-heading font-bold text-sm shadow-sm">
-                    Guardar Alimentación
+                    Guardar cambios
                 </button>
 
             </div>

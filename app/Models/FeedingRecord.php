@@ -33,13 +33,12 @@ class FeedingRecord extends Model
         if (!$this->recipe) {
             return 0;
         }
-    
+
         return (float) $this->recipe->recipeDetails
             ->sum(function ($detail) {
-                return $detail->quantity * ($detail->product->unit_cost ?? 0);
+                return (float) $detail->quantity *
+                    (float) ($detail->product->unit_cost ?? 0);
             });
-
-    return $cost;
     }
 
     public function animal(): BelongsTo
@@ -47,9 +46,6 @@ class FeedingRecord extends Model
         return $this->belongsTo(Animal::class);
     }
 
-    /**
-    * Puede ser null cuando el animal no está en gestación.
-    */
     public function gestationRecord(): BelongsTo
     {
         return $this->belongsTo(GestationRecord::class);
